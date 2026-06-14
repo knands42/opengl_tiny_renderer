@@ -41,7 +41,7 @@ auto VertexBuffer::Bind() -> void
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 }
 
-auto VertexBuffer::Unbind() -> void
+auto VertexBuffer::Unbind() const -> void
 {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);

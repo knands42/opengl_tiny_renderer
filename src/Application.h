@@ -11,7 +11,6 @@ public:
     Application();
     ~Application();
 
-    auto run() -> int;
     auto run(unsigned int get_shader_program, unsigned int get_vao) -> void;
 private:
     unsigned int width = 800, height = 600;
@@ -19,7 +18,7 @@ private:
     unsigned int m_VAO;
     unsigned int m_shaderProgram;
 
-    void mainLoop();
+    void mainLoop() const;
 
     // glfw: whenever the window size changed (by OS or user resize) this callback
     // function executes

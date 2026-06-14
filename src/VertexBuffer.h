@@ -9,7 +9,7 @@ public:
     ~VertexBuffer();
 
     void Bind();
-    void Unbind();
+    void Unbind() const;
 
     [[nodiscard]] auto GetVAO() const -> unsigned int { return VAO; }
 private:

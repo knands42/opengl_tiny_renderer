@@ -1,6 +1,6 @@
 #include "Application.h"
 
-#include "iostream"
+#include "print"
 
 Application::~Application()
 {
@@ -23,7 +23,7 @@ Application::Application()
     window = glfwCreateWindow(static_cast<int>(width), static_cast<int>(height), "LearnOpenGL", nullptr, nullptr);
     if (window == nullptr)
     {
-        std::cout << "Failed to create GLFW window" << '\n';
+        std::println("Failed to create GLFW window");
         glfwTerminate();
         throw std::runtime_error("Failed to create GLFW window");
     }
@@ -35,7 +35,7 @@ Application::Application()
     // ---------------------------------------
     if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
     {
-        std::cout << "Failed to initialize GLAD" << '\n';
+        std::println("Failed to initialize GLAD");
         throw std::runtime_error("Failed to initialize GLAD");
     }
 }
@@ -49,7 +49,7 @@ auto Application::run(unsigned int shaderProgram, unsigned int VAO) -> void
     glfwTerminate();
 }
 
-void Application::mainLoop()
+void Application::mainLoop() const
 {
     while (!glfwWindowShouldClose(window))
     {
@@ -64,7 +64,6 @@ void Application::mainLoop()
         glUseProgram(m_shaderProgram);
         glBindVertexArray(m_VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
         // check and call events and swap the buffers
         glfwSwapBuffers(window);
         glfwPollEvents();
