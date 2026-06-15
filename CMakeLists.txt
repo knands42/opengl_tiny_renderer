@@ -1,29 +1,16 @@
+# Setup base
 cmake_minimum_required(VERSION 3.16)
 project(opengl LANGUAGES CXX C)
 
 set(CMAKE_CXX_STANDARD 26)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-include(FetchContent)
+# Dependencies
+include(Dependencies.cmake)
 
-# Glm
-FetchContent_Declare(
-        glm
-        GIT_REPOSITORY	https://github.com/g-truc/glm.git
-)
-
-FetchContent_MakeAvailable(glm)
-
-# Glfw3
-FetchContent_Declare(
-        glfw3
-        GIT_REPOSITORY https://github.com/glfw/glfw
-)
-
-FetchContent_MakeAvailable(glfw3)
-
-# OpenGL
-find_package(OpenGL REQUIRED)
+# Projects
+add_subdirectory(App)
+add_subdirectory(Core)
 
 # Build & Pack
 add_executable(opengl
