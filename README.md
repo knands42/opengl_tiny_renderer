@@ -2,6 +2,10 @@
 
 Learning OpenGL through [LeanOpenGL](https://learnopengl.com) and The Cherno's Youtube Channel.
 
+## Showcase
+
+<img src="./assets/showcase.png">
+
 ## Prerequisites
 
 - CMAKE
