@@ -19,6 +19,7 @@ add_executable(opengl
 target_include_directories(opengl
         PRIVATE ${CMAKE_SOURCE_DIR}/src
         PRIVATE ${CMAKE_SOURCE_DIR}/shaders
+        PRIVATE ${CMAKE_SOURCE_DIR}/vendor
 )
 target_link_libraries(opengl PRIVATE glfw OpenGL::GL glm::glm glad)
 
