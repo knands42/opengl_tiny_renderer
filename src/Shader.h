@@ -14,7 +14,7 @@ public:
     explicit Shader(const std::string&  vertexPath, const std::string&  fragmentPath);
     ~Shader();
 
-    auto Bind() -> void;
+    auto Bind() const -> void;
     auto Unbind() const -> void;
     auto SetUniform(const char* variable, glm::vec4 vector) const -> void;
 private:

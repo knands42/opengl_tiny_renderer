@@ -8,7 +8,7 @@
 #include <filesystem>
 #include <GLFW/glfw3.h>
 
-#include "Error.h"
+#include "Renderer.h"
 
 Shader::Shader(
     const std::string &vertexPath,
@@ -34,17 +34,17 @@ Shader::Shader(
 
 Shader::~Shader()
 {
-    Unbind();
+    GLCall(glDeleteProgram(m_ShaderProgram));
 }
 
-auto Shader::Bind() -> void
+auto Shader::Bind() const -> void
 {
     GLCall(glUseProgram(m_ShaderProgram));
 }
 
 auto Shader::Unbind() const -> void
 {
-    GLCall(glDeleteProgram(m_ShaderProgram));
+    GLCall(glUseProgram(0));
 }
 
 auto Shader::SetUniform(const char *variable, glm::vec4 vector) const -> void

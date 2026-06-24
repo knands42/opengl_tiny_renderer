@@ -1,8 +1,11 @@
 #pragma once
 
 #include <glad/gl.h>
+
+#include "IndexBuffer.h"
 #include "GLFW/glfw3.h"
 #include "Shader.h"
+#include "VertexArray.h"
 #include "VertexBuffer.h"
 
 constexpr unsigned int DEFAULT_WIDTH = 800;
@@ -14,12 +17,14 @@ public:
     Application();
     ~Application();
 
-    auto Run(Shader &shader, VertexBuffer &vertexBuffer) -> void;
+    auto Run() const -> void;
 private:
     unsigned int width = DEFAULT_WIDTH, height = DEFAULT_HEIGHT;
     GLFWwindow *window = nullptr;
-    Shader *m_shader{};
-    VertexBuffer *m_vertexBuffer{};
+    Shader *m_Shader{};
+    VertexBuffer *m_VertexBuffer{};
+    IndexBuffer *m_IndexBuffer{};
+    VertexArray *m_VertexArray{};
 
     void MainLoop() const;
 

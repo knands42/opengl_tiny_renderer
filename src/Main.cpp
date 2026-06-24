@@ -6,14 +6,8 @@
 
 int main()
 {
-    Application app;
+    const Application app;
+    app.Run();
 
-    Shader shader("shaders/vertex.glsl", "shaders/fragment.glsl");
-    shader.Bind();
-
-    VertexBuffer vertexBuffer;
-    vertexBuffer.Bind();
-
-    app.Run(shader, vertexBuffer);
     return 0;
 }

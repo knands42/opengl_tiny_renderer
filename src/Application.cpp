@@ -10,9 +10,10 @@ Application::~Application()
 Application::Application()
 {
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -38,22 +39,45 @@ Application::Application()
         std::println("Failed to initialize GLAD");
         throw std::runtime_error("Failed to initialize GLAD");
     }
-}
 
-auto Application::Run(Shader &shader, VertexBuffer &vertexBuffer) -> void
-{
-    m_shader = &shader;
-    m_vertexBuffer = &vertexBuffer;
-
-    float vertices[] = {
+    // Creating VBO, VAO, EBO, Shaders
+    constexpr float vertices[] = {
         // positions         // colors
         0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  // bottom right
        -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  // bottom left
         0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f   // top
    };
-    m_vertexBuffer->Init(vertices, sizeof(vertices), nullptr, 0);
+    constexpr unsigned int indices[] = {
+        0, 1, 2
+    };
 
+    VertexBuffer* vb = new VertexBuffer(vertices, sizeof(vertices));
+    m_VertexBuffer = vb;
+
+    IndexBuffer* ib = new IndexBuffer(indices, 3);
+    m_IndexBuffer = ib;
+
+    VertexBufferLayout layout;
+    layout.Push<float>(3); // positions
+    layout.Push<float>(3); // colors
+    VertexArray* va = new VertexArray();
+    m_VertexArray = va;
+    m_VertexArray->AddBuffer(*m_VertexBuffer, layout);
+
+    Shader* shader = new Shader("shaders/vertex.glsl", "shaders/fragment.glsl");
+    shader->Bind();
+    m_Shader = shader;
+}
+
+auto Application::Run() const -> void
+{
     MainLoop();
+
+    delete m_VertexBuffer;
+    delete m_IndexBuffer;
+    delete m_VertexArray;
+    delete m_Shader;
+
     glfwTerminate();
 }
 
@@ -69,9 +93,12 @@ void Application::MainLoop() const
         glClear(GL_COLOR_BUFFER_BIT);
 
         // render
-        m_shader->Bind();
-        m_vertexBuffer->Bind();
-        m_vertexBuffer->Draw();
+        m_Shader->Bind();
+        m_VertexArray->Bind();
+        m_IndexBuffer->Bind();
+
+        GLCall(glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr));
+        // GLCall(glDrawArrays(GL_TRIANGLES, 0, 3));
 
         // check and call events and swap the buffers
         glfwSwapBuffers(window);
