@@ -3,43 +3,40 @@
 #include <fstream>
 #include <print>
 #include <utility>
-#include <cerrno>
-#include <cstring>
+#include <system_error>
 #include <filesystem>
 #include <GLFW/glfw3.h>
 
 #include "Renderer.h"
 
 Shader::Shader(
-    const std::string &vertexPath,
-    const std::string &fragmentPath)
+    const char *vertexPath,
+    const char *fragmentPath)
 {
     const std::string vertexShaderSource = ParseShader(vertexPath);
     const std::string fragmentShaderSource = ParseShader(fragmentPath);
 
     const unsigned int vertexShader =
-            CompileShader(GL_VERTEX_SHADER, vertexShaderSource);
+            CompileShader(GL_VERTEX_SHADER, vertexShaderSource.c_str());
     const unsigned int fragmentShader =
-            CompileShader(GL_FRAGMENT_SHADER, fragmentShaderSource);
-    m_VertexShader = vertexShader;
-    m_FragmentShader = fragmentShader;
+            CompileShader(GL_FRAGMENT_SHADER, fragmentShaderSource.c_str());
 
-    const unsigned int shaderProgram = CreateProgram(m_VertexShader, m_FragmentShader);
-    m_ShaderProgram = shaderProgram;
+    const unsigned int shaderProgram = CreateProgram(vertexShader, fragmentShader);
+    m_RendererID = shaderProgram;
 
     // delete the shaders as they're linked into our program and no longer necessary
-    glDeleteShader(m_VertexShader);
-    glDeleteShader(m_FragmentShader);
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
 }
 
 Shader::~Shader()
 {
-    GLCall(glDeleteProgram(m_ShaderProgram));
+    GLCall(glDeleteProgram(m_RendererID));
 }
 
 auto Shader::Bind() const -> void
 {
-    GLCall(glUseProgram(m_ShaderProgram));
+    GLCall(glUseProgram(m_RendererID));
 }
 
 auto Shader::Unbind() const -> void
@@ -47,20 +44,37 @@ auto Shader::Unbind() const -> void
     GLCall(glUseProgram(0));
 }
 
-auto Shader::SetUniform(const char *variable, glm::vec4 vector) const -> void
+auto Shader::SetUniform4f(const char *name, glm::vec4 vector) const -> void
 {
     const float timeValue = glfwGetTime();
     const float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
-    const int vertexColorLocation = glGetUniformLocation(m_ShaderProgram, "ourColor");
+    const int vertexColorLocation = GetUniformLocation(name);
     ASSERT(vertexColorLocation != -1);
-    GLCall(glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f));
+    GLCall(glUniform4f(vertexColorLocation, vector.x, greenValue, vector.z, vector.w));
 }
 
-auto Shader::CompileShader(const unsigned int type, const std::string &source) -> unsigned int
+auto Shader::GetUniformLocation(const char* name) const -> unsigned int
+{
+    if (m_UniformLocationCache.contains(name))
+    {
+        return m_UniformLocationCache.at(name);
+    }
+
+    GLCall(const unsigned int location = glGetUniformLocation(m_RendererID, name));
+    if (std::cmp_equal(location , -1))
+    {
+        printf("ERROR::SHADER::UNIFORM::LOCATION_NOT_FOUND: %s\n", name);
+    }
+
+    m_UniformLocationCache[name] = location;
+
+    return location;
+}
+
+auto Shader::CompileShader(const unsigned int type, const char* source) -> unsigned int
 {
     const unsigned int newShader = glCreateShader(type);
-    const char *src = source.c_str();
-    glShaderSource(newShader, 1, &src, nullptr);
+    glShaderSource(newShader, 1, &source, nullptr);
     GLCall(glCompileShader(newShader));
 
     // check for shader compile errors
@@ -99,12 +113,12 @@ auto Shader::CreateProgram(const unsigned int vertexShader, const unsigned int f
     return shaderProgram;
 }
 
-auto Shader::ParseShader(const std::string &file) -> std::string
+auto Shader::ParseShader(const char *file) -> std::string
 {
     std::ifstream stream(file);
     if (!stream.is_open())
     {
-        throw std::runtime_error("Failed to open shader: " + file + " with error: " + std::strerror(errno));
+        throw std::system_error(errno, std::generic_category(), std::string("Failed to open shader: ") + file);
     }
 
     std::stringstream ss;

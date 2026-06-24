@@ -51,17 +51,18 @@ Application::Application()
         0, 1, 2
     };
 
-    VertexBuffer* vb = new VertexBuffer(vertices, sizeof(vertices));
-    m_VertexBuffer = vb;
+    auto* vertexBuffer = new VertexBuffer(vertices, sizeof(vertices));
+    m_VertexBuffer = vertexBuffer;
 
-    IndexBuffer* ib = new IndexBuffer(indices, 3);
-    m_IndexBuffer = ib;
+    IndexBuffer* indexBuffer = new IndexBuffer(indices, 3);
+    m_IndexBuffer = indexBuffer;
 
     VertexBufferLayout layout;
     layout.Push<float>(3); // positions
     layout.Push<float>(3); // colors
-    VertexArray* va = new VertexArray();
-    m_VertexArray = va;
+
+    VertexArray* vertexArray = new VertexArray();
+    m_VertexArray = vertexArray;
     m_VertexArray->AddBuffer(*m_VertexBuffer, layout);
 
     Shader* shader = new Shader("shaders/vertex.glsl", "shaders/fragment.glsl");
