@@ -25,5 +25,5 @@ private:
     static auto CreateProgram(unsigned int vertexShader, unsigned int fragmentShader) -> unsigned int;
     static auto CompileShader(unsigned int type, const char* source) -> unsigned int;
     static auto ParseShader(const char* file) -> std::string;
-    auto GetUniformLocation(const char* name) const -> unsigned int;
+    auto GetUniformLocation(const char* name) const -> int;
 };

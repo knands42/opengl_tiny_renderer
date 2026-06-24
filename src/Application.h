@@ -3,6 +3,7 @@
 #include <glad/gl.h>
 
 #include "IndexBuffer.h"
+#include "Renderer.h"
 #include "GLFW/glfw3.h"
 #include "Shader.h"
 #include "VertexArray.h"
@@ -25,6 +26,7 @@ private:
     VertexBuffer *m_VertexBuffer{};
     IndexBuffer *m_IndexBuffer{};
     VertexArray *m_VertexArray{};
+    Renderer m_Renderer;
 
     void MainLoop() const;
 

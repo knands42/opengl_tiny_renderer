@@ -1,6 +1,7 @@
 #include "Application.h"
 
 #include "print"
+#include "Renderer.h"
 
 Application::~Application()
 {
@@ -68,6 +69,8 @@ Application::Application()
     Shader* shader = new Shader("shaders/vertex.glsl", "shaders/fragment.glsl");
     shader->Bind();
     m_Shader = shader;
+
+    Renderer renderer;
 }
 
 auto Application::Run() const -> void
@@ -90,15 +93,12 @@ void Application::MainLoop() const
         ProcessInput(window);
 
         // rendering commands here
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        m_Renderer.Clear();
 
         // render
-        m_Shader->Bind();
-        m_VertexArray->Bind();
-        m_IndexBuffer->Bind();
+        // m_Shader->SetUniform4f("u_Color", glm::vec4(0.3f, 0.8f, 0.3f, 1.0f));
 
-        GLCall(glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr));
+        m_Renderer.Draw(*m_VertexArray, *m_IndexBuffer, *m_Shader);
         // GLCall(glDrawArrays(GL_TRIANGLES, 0, 3));
 
         // check and call events and swap the buffers

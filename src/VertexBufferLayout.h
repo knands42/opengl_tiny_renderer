@@ -2,8 +2,7 @@
 #include <ranges>
 #include <vector>
 
-#include "Renderer.h"
-#include "glad/gl.h"
+#include "GLError.h"
 
 struct VertexBufferElement
 {

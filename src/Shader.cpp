@@ -53,15 +53,15 @@ auto Shader::SetUniform4f(const char *name, glm::vec4 vector) const -> void
     GLCall(glUniform4f(vertexColorLocation, vector.x, greenValue, vector.z, vector.w));
 }
 
-auto Shader::GetUniformLocation(const char* name) const -> unsigned int
+auto Shader::GetUniformLocation(const char* name) const -> int
 {
     if (m_UniformLocationCache.contains(name))
     {
         return m_UniformLocationCache.at(name);
     }
 
-    GLCall(const unsigned int location = glGetUniformLocation(m_RendererID, name));
-    if (std::cmp_equal(location , -1))
+    GLCall(const int location = glGetUniformLocation(m_RendererID, name));
+    if (location == -1)
     {
         printf("ERROR::SHADER::UNIFORM::LOCATION_NOT_FOUND: %s\n", name);
     }
