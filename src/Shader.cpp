@@ -39,12 +39,12 @@ Shader::~Shader()
 
 auto Shader::Bind() -> void
 {
-    glUseProgram(m_ShaderProgram);
+    GLCall(glUseProgram(m_ShaderProgram));
 }
 
 auto Shader::Unbind() const -> void
 {
-    glDeleteProgram(m_ShaderProgram);
+    GLCall(glDeleteProgram(m_ShaderProgram));
 }
 
 auto Shader::SetUniform(const char *variable, glm::vec4 vector) const -> void
@@ -52,7 +52,8 @@ auto Shader::SetUniform(const char *variable, glm::vec4 vector) const -> void
     const float timeValue = glfwGetTime();
     const float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
     const int vertexColorLocation = glGetUniformLocation(m_ShaderProgram, "ourColor");
-    glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
+    ASSERT(vertexColorLocation != -1);
+    GLCall(glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f));
 }
 
 auto Shader::CompileShader(const unsigned int type, const std::string &source) -> unsigned int
