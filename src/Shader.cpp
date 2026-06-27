@@ -1,10 +1,7 @@
 #include "Shader.h"
 
 #include <fstream>
-#include <print>
-#include <utility>
-#include <system_error>
-#include <filesystem>
+#include <iostream>
 #include <GLFW/glfw3.h>
 
 #include "Renderer.h"
@@ -95,8 +92,8 @@ auto Shader::CompileShader(const unsigned int type, const char* source) -> unsig
         int length = 0;
         glGetShaderiv(newShader, GL_INFO_LOG_LENGTH, &length);
         char infoLog[length];
-        glGetShaderInfoLog(newShader, 512, NULL, infoLog);
-        std::println("ERROR::SHADER::VERTEX::COMPILATION_FAILED: {}", *infoLog);
+        glGetShaderInfoLog(newShader, 512, nullptr, infoLog);
+        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED: " << infoLog << std::endl;
     }
 
     return newShader;
@@ -116,8 +113,8 @@ auto Shader::CreateProgram(const unsigned int vertexShader, const unsigned int f
     glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
     if (!success)
     {
-        glGetProgramInfoLog(shaderProgram, 512, 0, infoLog);
-        std::println("ERROR::SHADER::PROGRAM::LINKING_FAILED: {}", *infoLog);
+        glGetProgramInfoLog(shaderProgram, 512, nullptr, infoLog);
+        std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED: " << infoLog << std::endl;
     }
 
     return shaderProgram;

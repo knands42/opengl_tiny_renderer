@@ -1,8 +1,8 @@
-#version 330 core
+#version 460 core
 
 layout (location = 0) in vec3 l_Pos;
 layout (location = 1) in vec3 l_Color;
-layout (location = 2) in vec3 l_Texture;
+layout (location = 2) in vec2 l_Texture;
 
 out vec3 v_Color;
 out vec2 v_TexCoord ;
