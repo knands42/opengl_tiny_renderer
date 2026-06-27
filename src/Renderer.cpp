@@ -1,5 +1,4 @@
 #include "Renderer.h"
-#include "print"
 
 void GLClearError()
 {
@@ -24,11 +23,12 @@ void Renderer::Clear() const
     GLCall(glClear(GL_COLOR_BUFFER_BIT));
 }
 
-void Renderer::Draw(const VertexArray &vertexArray, const IndexBuffer &indexBuffer, const Shader &shader) const
+void Renderer::Draw(const VertexArray &vertexArray, const IndexBuffer &indexBuffer, const Shader &shader, const Texture &texture) const
 {
     shader.Bind();
     vertexArray.Bind();
     indexBuffer.Bind();
+    texture.Bind();
 
     GLCall(glDrawElements(GL_TRIANGLES, indexBuffer.GetCount(), GL_UNSIGNED_INT, nullptr));
 }

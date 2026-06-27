@@ -106,7 +106,7 @@ void Application::MainLoop() const
         // render
         // m_Shader->SetUniform4f("u_Color", glm::vec4(0.3f, 0.8f, 0.3f, 1.0f));
 
-        m_Renderer.Draw(*m_VertexArray, *m_IndexBuffer, *m_Shader);
+        m_Renderer.Draw(*m_VertexArray, *m_IndexBuffer, *m_Shader, *m_Texture);
         // GLCall(glDrawArrays(GL_TRIANGLES, 0, 3));
 
         // check and call events and swap the buffers
