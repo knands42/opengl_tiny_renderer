@@ -17,6 +17,8 @@ add_executable(opengl
         src/IndexBuffer.cpp
         src/Renderer.cpp
         src/VertexArray.cpp
+        src/Texture.cpp
+        vendor/stb_image.cpp
 )
 
 target_include_directories(opengl

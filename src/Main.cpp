@@ -1,7 +1,4 @@
 #include "Application.h"
-#include "Shader.h"
-#include "Textures.h"
-#include "VertexBuffer.h"
 
 
 int main()

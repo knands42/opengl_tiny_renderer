@@ -6,6 +6,7 @@
 #include "Renderer.h"
 #include "GLFW/glfw3.h"
 #include "Shader.h"
+#include "Texture.h"
 #include "VertexArray.h"
 #include "VertexBuffer.h"
 
@@ -26,6 +27,7 @@ private:
     VertexBuffer *m_VertexBuffer{};
     IndexBuffer *m_IndexBuffer{};
     VertexArray *m_VertexArray{};
+    Texture *m_Texture{};
     Renderer m_Renderer;
 
     void MainLoop() const;

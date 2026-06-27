@@ -43,10 +43,10 @@ Application::Application()
 
     // Creating VBO, VAO, EBO, Shaders
     constexpr float vertices[] = {
-        // positions         // colors
-        0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  // bottom right
-       -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  // bottom left
-        0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f   // top
+        // positions         // colors         // texture coords
+        0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  0.0f, 0.0f,       // bottom right
+       -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f,       // bottom left
+        0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  1.0, 1.0f,        // top
    };
     constexpr unsigned int indices[] = {
         0, 1, 2
@@ -61,6 +61,7 @@ Application::Application()
     VertexBufferLayout layout;
     layout.Push<float>(3); // positions
     layout.Push<float>(3); // colors
+    layout.Push<float>(2); // textures
 
     VertexArray* vertexArray = new VertexArray();
     m_VertexArray = vertexArray;
@@ -70,6 +71,11 @@ Application::Application()
     shader->Bind();
     m_Shader = shader;
 
+    Texture* texture = new Texture("wall.jpg");
+    texture->Bind();
+    shader->SetUniform1i("u_Texture", 0);
+    m_Texture = texture;
+
     Renderer renderer;
 }
 
@@ -77,10 +83,12 @@ auto Application::Run() const -> void
 {
     MainLoop();
 
+    // TODO: Do not use heap allocation
     delete m_VertexBuffer;
     delete m_IndexBuffer;
     delete m_VertexArray;
     delete m_Shader;
+    delete m_Texture;
 
     glfwTerminate();
 }

@@ -20,6 +20,8 @@ public:
     auto Bind() const -> void;
     auto Unbind() const -> void;
     auto SetUniform4f(const char* name, glm::vec4 vector) const -> void;
+    auto SetUniform1f(const char* name, float value) const -> void;
+    auto SetUniform1i(const char* name, int value) const -> void;
 
 private:
     static auto CreateProgram(unsigned int vertexShader, unsigned int fragmentShader) -> unsigned int;
