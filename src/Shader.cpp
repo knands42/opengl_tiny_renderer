@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include <GLFW/glfw3.h>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "Renderer.h"
 
@@ -58,6 +59,11 @@ auto Shader::SetUniform1f(const char *name, float value) const -> void
 auto Shader::SetUniform1i(const char *name, int value) const -> void
 {
     GLCall(glUniform1i(GetUniformLocation(name), value));
+}
+
+auto Shader::SetUniformMat4f(const char *name, const glm::mat4 &matrix) const -> void
+{
+    GLCall(glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(matrix)));
 }
 
 auto Shader::GetUniformLocation(const char* name) const -> int

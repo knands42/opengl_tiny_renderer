@@ -22,6 +22,7 @@ public:
     auto SetUniform4f(const char* name, glm::vec4 vector) const -> void;
     auto SetUniform1f(const char* name, float value) const -> void;
     auto SetUniform1i(const char* name, int value) const -> void;
+    auto SetUniformMat4f(const char *name, const glm::mat4 &matrix) const -> void;
 
 private:
     static auto CreateProgram(unsigned int vertexShader, unsigned int fragmentShader) -> unsigned int;

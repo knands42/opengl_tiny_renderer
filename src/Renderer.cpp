@@ -31,4 +31,5 @@ void Renderer::Draw(const VertexArray &vertexArray, const IndexBuffer &indexBuff
     texture.Bind();
 
     GLCall(glDrawElements(GL_TRIANGLES, indexBuffer.GetCount(), GL_UNSIGNED_INT, nullptr));
+    // GLCall(glDrawArrays(GL_TRIANGLES, 0, 3));
 }

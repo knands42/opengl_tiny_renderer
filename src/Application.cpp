@@ -2,6 +2,10 @@
 
 #include "print"
 #include "Renderer.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <print>
 
 Application::~Application()
 {
@@ -51,6 +55,9 @@ Application::Application()
     constexpr unsigned int indices[] = {
         0, 1, 2
     };
+
+    GLCall(glEnable(GL_BLEND))
+    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA))
 
     auto* vertexBuffer = new VertexBuffer(vertices, sizeof(vertices));
     m_VertexBuffer = vertexBuffer;
@@ -103,11 +110,19 @@ void Application::MainLoop() const
         // rendering commands here
         m_Renderer.Clear();
 
-        // render
-        // m_Shader->SetUniform4f("u_Color", glm::vec4(0.3f, 0.8f, 0.3f, 1.0f));
+        // model: rotate continuously around Z over time
+        auto transform = glm::mat4(1.0f);
+        transform = glm::translate(transform, glm::vec3(0.5f, 0.5f, 0.0f));
+        transform = glm::rotate(transform, static_cast<float>(glfwGetTime()), glm::vec3(0.0f, 0.0f, 1.0f));
+        transform = glm::scale(transform, glm::vec3(0.5f, 0.5f, 0.5f));
 
+        m_Shader->Bind();
+        m_Shader->SetUniformMat4f("u_Transform", transform);
+        // m_Shader->SetUniformMat4f("u_View", m_Camera.GetViewMatrix());
+        // m_Shader->SetUniformMat4f("u_Projection", m_Camera.GetProjectionMatrix(static_cast<float>(width) / static_cast<float>(height)));
+
+        // render
         m_Renderer.Draw(*m_VertexArray, *m_IndexBuffer, *m_Shader, *m_Texture);
-        // GLCall(glDrawArrays(GL_TRIANGLES, 0, 3));
 
         // check and call events and swap the buffers
         glfwSwapBuffers(window);
