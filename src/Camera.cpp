@@ -38,7 +38,7 @@ glm::mat4 Camera::GetModelMatrix() const
 {
     auto transform = glm::mat4(1.0f);
     transform = glm::translate(transform, glm::vec3(0.5f, 0.5f, 0.0f));
-    transform = glm::rotate(transform, static_cast<float>(glfwGetTime()), glm::vec3(0.0f, 0.0f, 1.0f));
+    transform = glm::rotate(transform, static_cast<float>(glfwGetTime()), glm::vec3(1.0f, 1.0f, 1.0f));
     transform = glm::scale(transform, glm::vec3(0.5f, 0.5f, 0.5f));
     return transform;
 }

@@ -46,10 +46,30 @@ Application::Application()
 
     // Creating VBO, VAO, EBO, Shaders
     constexpr float vertices[] = {
-        // positions      // texture coords
-        0.5f, -0.5f, 0.0f,  0.0f, 0.0f, // bottom right
-        -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // bottom left
-        0.0f, 0.5f, 0.0f,  1.0, 1.0f, // top
+        // positions            // texture coords
+        // Front face
+         0.0f,  0.5f,  0.0f,   0.5f, 1.0f,
+        -0.5f, -0.5f,  0.5f,   0.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,   1.0f, 0.0f,
+        // Right face
+         0.0f,  0.5f,  0.0f,   0.5f, 1.0f,
+         0.5f, -0.5f,  0.5f,   0.0f, 0.0f,
+         0.5f, -0.5f, -0.5f,   1.0f, 0.0f,
+        // Back face
+         0.0f,  0.5f,  0.0f,   0.5f, 1.0f,
+         0.5f, -0.5f, -0.5f,   0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,   1.0f, 0.0f,
+        // Left face
+         0.0f,  0.5f,  0.0f,   0.5f, 1.0f,
+        -0.5f, -0.5f, -0.5f,   0.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,   1.0f, 0.0f,
+        // Bottom face (two triangles)
+        -0.5f, -0.5f,  0.5f,   0.0f, 0.0f,
+         0.5f, -0.5f, -0.5f,   1.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,   1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,   0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,   0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,   1.0f, 1.0f,
     };
 
     GLCall(glEnable(GL_BLEND))
