@@ -46,14 +46,15 @@ Application::Application()
 
     // Creating VBO, VAO, EBO, Shaders
     constexpr float vertices[] = {
-        // positions         // colors         // texture coords
-        0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // bottom right
-        -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom left
-        0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0, 1.0f, // top
+        // positions      // texture coords
+        0.5f, -0.5f, 0.0f,  0.0f, 0.0f, // bottom right
+        -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // bottom left
+        0.0f, 0.5f, 0.0f,  1.0, 1.0f, // top
     };
 
     GLCall(glEnable(GL_BLEND))
     GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA))
+
     GLCall(glEnable(GL_DEPTH_TEST))
 
     auto *vertexBuffer = new VertexBuffer(vertices, sizeof(vertices));
@@ -61,7 +62,6 @@ Application::Application()
 
     VertexBufferLayout layout;
     layout.Push<float>(3); // positions
-    layout.Push<float>(3); // colors
     layout.Push<float>(2); // textures
 
     VertexArray *vertexArray = new VertexArray();
