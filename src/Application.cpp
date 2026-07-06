@@ -5,7 +5,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <print>
 
 Application::~Application()
 {
@@ -18,7 +17,7 @@ Application::Application()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -48,10 +47,10 @@ Application::Application()
     // Creating VBO, VAO, EBO, Shaders
     constexpr float vertices[] = {
         // positions         // colors         // texture coords
-        0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  0.0f, 0.0f,       // bottom right
-       -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f,       // bottom left
-        0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  1.0, 1.0f,        // top
-   };
+        0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // bottom right
+        -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom left
+        0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0, 1.0f, // top
+    };
     constexpr unsigned int indices[] = {
         0, 1, 2
     };
@@ -59,10 +58,10 @@ Application::Application()
     GLCall(glEnable(GL_BLEND))
     GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA))
 
-    auto* vertexBuffer = new VertexBuffer(vertices, sizeof(vertices));
+    auto *vertexBuffer = new VertexBuffer(vertices, sizeof(vertices));
     m_VertexBuffer = vertexBuffer;
 
-    IndexBuffer* indexBuffer = new IndexBuffer(indices, 3);
+    IndexBuffer *indexBuffer = new IndexBuffer(indices, 3);
     m_IndexBuffer = indexBuffer;
 
     VertexBufferLayout layout;
@@ -70,18 +69,22 @@ Application::Application()
     layout.Push<float>(3); // colors
     layout.Push<float>(2); // textures
 
-    VertexArray* vertexArray = new VertexArray();
+    VertexArray *vertexArray = new VertexArray();
     m_VertexArray = vertexArray;
     m_VertexArray->AddBuffer(*m_VertexBuffer, layout);
 
-    Shader* shader = new Shader("shaders/vertex.glsl", "shaders/fragment.glsl");
+    Shader *shader = new Shader("shaders/vertex.glsl", "shaders/fragment.glsl");
     shader->Bind();
     m_Shader = shader;
 
-    Texture* texture = new Texture("textures/wall.jpg");
+    Texture *texture = new Texture("textures/wall.jpg");
     texture->Bind();
     shader->SetUniform1i("u_Texture", 0);
     m_Texture = texture;
+
+    Camera *camera = new Camera();
+    camera->SetPosition(glm::vec3(0.0f, 0.0f, 3.0f));
+    m_Camera = camera;
 
     Renderer renderer;
 }
@@ -96,6 +99,7 @@ auto Application::Run() const -> void
     delete m_VertexArray;
     delete m_Shader;
     delete m_Texture;
+    delete m_Camera;
 
     glfwTerminate();
 }
@@ -111,15 +115,12 @@ void Application::MainLoop() const
         m_Renderer.Clear();
 
         // model: rotate continuously around Z over time
-        auto transform = glm::mat4(1.0f);
-        transform = glm::translate(transform, glm::vec3(0.5f, 0.5f, 0.0f));
-        transform = glm::rotate(transform, static_cast<float>(glfwGetTime()), glm::vec3(0.0f, 0.0f, 1.0f));
-        transform = glm::scale(transform, glm::vec3(0.5f, 0.5f, 0.5f));
-
         m_Shader->Bind();
-        m_Shader->SetUniformMat4f("u_Transform", transform);
-        // m_Shader->SetUniformMat4f("u_View", m_Camera.GetViewMatrix());
-        // m_Shader->SetUniformMat4f("u_Projection", m_Camera.GetProjectionMatrix(static_cast<float>(width) / static_cast<float>(height)));
+        m_Shader->SetUniformMat4f("u_Model", m_Camera->GetModelMatrix());
+        m_Shader->SetUniformMat4f("u_View", m_Camera->GetViewMatrix(glm::vec3(0.0f)));
+        m_Shader->SetUniformMat4f("u_Projection", m_Camera->GetProjectionMatrix(
+                                      glm::radians(45.0f), static_cast<float>(width), static_cast<float>(height), 0.1f,
+                                      100.0f));
 
         // render
         m_Renderer.Draw(*m_VertexArray, *m_IndexBuffer, *m_Shader, *m_Texture);

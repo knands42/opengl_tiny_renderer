@@ -2,6 +2,7 @@
 
 #include <glad/gl.h>
 
+#include "Camera.h"
 #include "IndexBuffer.h"
 #include "Renderer.h"
 #include "GLFW/glfw3.h"
@@ -28,6 +29,7 @@ private:
     IndexBuffer *m_IndexBuffer{};
     VertexArray *m_VertexArray{};
     Texture *m_Texture{};
+    Camera *m_Camera{};
     Renderer m_Renderer;
 
     void MainLoop() const;

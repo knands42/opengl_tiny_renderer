@@ -1,6 +1,6 @@
 # Setup base
 cmake_minimum_required(VERSION 3.16)
-project(opengl LANGUAGES CXX C)
+project(opengl_tiny_renderer LANGUAGES CXX C)
 
 set(CMAKE_CXX_STANDARD 26)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -10,7 +10,7 @@ include(Dependencies.cmake)
 
 # Build & Pack
 # TODO: set sources
-add_executable(opengl
+add_executable(opengl_tiny_renderer
         src/Main.cpp
         src/Shader.cpp
         src/VertexBuffer.cpp
@@ -19,19 +19,20 @@ add_executable(opengl
         src/Renderer.cpp
         src/VertexArray.cpp
         src/Texture.cpp
+        src/Camera.cpp
         vendor/stb_image.cpp
 )
 
-target_include_directories(opengl
+target_include_directories(opengl_tiny_renderer
         PRIVATE ${CMAKE_SOURCE_DIR}/src
         PRIVATE ${CMAKE_SOURCE_DIR}/shaders
         PRIVATE ${CMAKE_SOURCE_DIR}/vendor
         PRIVATE ${CMAKE_SOURCE_DIR}/textures
 )
-target_link_libraries(opengl PRIVATE glfw OpenGL::GL glm::glm glad)
+target_link_libraries(opengl_tiny_renderer PRIVATE glfw OpenGL::GL glm::glm glad)
 
 add_custom_target(run
-        COMMAND $<TARGET_FILE:opengl>
-        DEPENDS opengl
+        COMMAND $<TARGET_FILE:opengl_tiny_renderer>
+        DEPENDS opengl_tiny_renderer
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 )
