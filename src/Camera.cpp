@@ -21,9 +21,9 @@ glm::mat4 Camera::GetViewMatrix(const glm::vec3 at) const
 glm::mat4 Camera::GetViewMatrix(const float yaw, const float pitch) const
 {
     glm::vec3 forward;
-    forward.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    forward.x = -sin(glm::radians(yaw)) * cos(glm::radians(pitch));
     forward.y = sin(glm::radians(pitch));
-    forward.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+    forward.z = -cos(glm::radians(yaw)) * cos(glm::radians(pitch));
     forward = glm::normalize(forward);
     return glm::lookAt(m_Position, m_Position + forward, glm::vec3(0.0f, 1.0f, 0.0f));
 }
