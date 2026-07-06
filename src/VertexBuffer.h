@@ -11,7 +11,9 @@ public:
     void Bind() const;
     void Unbind() const;
     void EnablePolygonMode() const;
+    unsigned int GetSize() const { return m_Size; }
 
 private:
     unsigned int m_RendererID;
+    unsigned int m_Size;
 };

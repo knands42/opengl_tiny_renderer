@@ -51,18 +51,13 @@ Application::Application()
         -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom left
         0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0, 1.0f, // top
     };
-    constexpr unsigned int indices[] = {
-        0, 1, 2
-    };
 
     GLCall(glEnable(GL_BLEND))
     GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA))
+    GLCall(glEnable(GL_DEPTH_TEST))
 
     auto *vertexBuffer = new VertexBuffer(vertices, sizeof(vertices));
     m_VertexBuffer = vertexBuffer;
-
-    IndexBuffer *indexBuffer = new IndexBuffer(indices, 3);
-    m_IndexBuffer = indexBuffer;
 
     VertexBufferLayout layout;
     layout.Push<float>(3); // positions
@@ -86,7 +81,8 @@ Application::Application()
     camera->SetPosition(glm::vec3(0.0f, 0.0f, 3.0f));
     m_Camera = camera;
 
-    Renderer renderer;
+    constexpr Renderer renderer;
+    m_Renderer = renderer;
 }
 
 auto Application::Run() const -> void
@@ -95,7 +91,6 @@ auto Application::Run() const -> void
 
     // TODO: Do not use heap allocation
     delete m_VertexBuffer;
-    delete m_IndexBuffer;
     delete m_VertexArray;
     delete m_Shader;
     delete m_Texture;
@@ -123,7 +118,7 @@ void Application::MainLoop() const
                                       100.0f));
 
         // render
-        m_Renderer.Draw(*m_VertexArray, *m_IndexBuffer, *m_Shader, *m_Texture);
+        m_Renderer.Draw(*m_VertexArray, *m_Shader, *m_Texture);
 
         // check and call events and swap the buffers
         glfwSwapBuffers(window);

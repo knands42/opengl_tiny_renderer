@@ -2,7 +2,7 @@
 
 #include "Renderer.h"
 
-VertexArray::VertexArray()
+VertexArray::VertexArray() : m_Count(0)
 {
     GLCall(glGenVertexArrays(1, &m_RendererID));
 }
@@ -37,4 +37,11 @@ void VertexArray::AddBuffer(const VertexBuffer &vb, const VertexBufferLayout &la
                 layout.GetStride(), (const void*)offset));
         offset += element.count * VertexBufferElement::GetSizeOfType(element.type);
     }
+
+    m_Count = vb.GetSize() / layout.GetStride();
+}
+
+unsigned int VertexArray::GetCount() const
+{
+    return m_Count;
 }
