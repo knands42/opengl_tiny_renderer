@@ -88,11 +88,11 @@ Application::Application()
     m_VertexArray = vertexArray;
     m_VertexArray->AddBuffer(*m_VertexBuffer, layout);
 
-    Shader *shader = new Shader("shaders/vertex.glsl", "shaders/fragment.glsl");
+    Shader *shader = new Shader("Shaders/vertex.glsl", "Shaders/fragment.glsl");
     shader->Bind();
     m_Shader = shader;
 
-    Texture *texture = new Texture("textures/wall.jpg");
+    Texture *texture = new Texture("Textures/wall.jpg");
     texture->Bind();
     shader->SetUniform1i("u_Texture", 0);
     m_Texture = texture;
