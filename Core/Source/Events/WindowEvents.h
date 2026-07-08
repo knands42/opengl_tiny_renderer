@@ -1,11 +1,14 @@
 #pragma once
 
+#include <cstdio>
 #include "Event.h"
+#include <glad/gl.h>
 
 namespace Core
 {
     class WindowClosedEvent : public Event
     {
+    public:
         WindowClosedEvent()
         {
         }
@@ -31,12 +34,14 @@ namespace Core
 
         const char *ToString() const override
         {
-            return "WindowResizeEvent: " + m_Width + " " + m_Height;
+            snprintf(m_StringBuffer, sizeof(m_StringBuffer), "WindowResizeEvent: {} {}", m_Width, m_Height);
+            return m_StringBuffer;
         }
 
         EVENT_CLASS_TYPE(WindowResize)
 
     private:
         uint32_t m_Width, m_Height;
+        mutable char m_StringBuffer[64];
     };
 } // namespace Core

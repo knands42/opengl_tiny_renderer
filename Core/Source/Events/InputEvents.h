@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdio>
+
 #include "Event.h"
 
 namespace Core
@@ -39,15 +41,16 @@ namespace Core
 
         const char *ToString() const override
         {
-            return "KeyPressedEvent: " + m_KeyCode + " (repeat=" + m_IsRepeat + ")";
+            snprintf(m_StringBuffer, sizeof(m_StringBuffer), "KeyPressedEvent: {} (repeat={})", m_KeyCode, m_IsRepeat);
+            return m_StringBuffer;
         }
 
         EVENT_CLASS_TYPE(KeyPressed)
     private:
         bool m_IsRepeat;
+        mutable char m_StringBuffer[64];
     };
 
-    
     class KeyReleasedEvent : public KeyEvent
     {
     public:
@@ -57,10 +60,13 @@ namespace Core
 
         const char *ToString() const override
         {
-            return "KeyReleasedEvent: " + m_KeyCode;
+            snprintf(m_StringBuffer, sizeof(m_StringBuffer), "KeyReleasedEvent: {}", m_KeyCode);
+            return m_StringBuffer;
         }
 
         EVENT_CLASS_TYPE(KeyReleased)
+    private:
+        mutable char m_StringBuffer[64];
     };
 
     //
@@ -85,12 +91,14 @@ namespace Core
 
         const char *ToString() const override
         {
-            return "MouseMovedEvent: "+ m_MouseX +", " m_MouseY);
+            snprintf(m_StringBuffer, sizeof(m_StringBuffer), "MouseMovedEvent: %.2f, %.2f", m_MouseX, m_MouseY);
+            return m_StringBuffer;
         }
 
         EVENT_CLASS_TYPE(MouseMoved)
     private:
         double m_MouseX, m_MouseY;
+        mutable char m_StringBuffer[64];
     };
 
     class MouseScrolledEvent : public Event
@@ -111,12 +119,14 @@ namespace Core
 
         const char *ToString() const override
         {
-            return "MouseScrolledEvent: " + m_XOffset + " " + m_YOffset);
+            snprintf(m_StringBuffer, sizeof(m_StringBuffer), "MouseScrolledEvent: %.2f, %.2f", m_XOffset, m_YOffset);
+            return m_StringBuffer;
         }
 
         EVENT_CLASS_TYPE(MouseScrolled)
     private:
         double m_XOffset, m_YOffset;
+        mutable char m_StringBuffer[64];
     };
 
     class MouseButtonEvent : public Event
@@ -144,10 +154,13 @@ namespace Core
 
         const char *ToString() const override
         {
-            return "MouseButtonPressedEvent: " + m_Button);
+            snprintf(m_StringBuffer, sizeof(m_StringBuffer), "MouseButtonPressedEvent: {}", m_Button);
+            return m_StringBuffer;
         }
 
         EVENT_CLASS_TYPE(MouseButtonPressed)
+    private:
+        mutable char m_StringBuffer[64];
     };
 
     class MouseButtonReleasedEvent : public MouseButtonEvent
@@ -159,10 +172,13 @@ namespace Core
 
         const char *ToString() const override
         {
-            return "MouseButtonReleasedEvent: " + m_Button);
+            snprintf(m_StringBuffer, sizeof(m_StringBuffer), "MouseButtonReleasedEvent: {}", m_Button);
+            return m_StringBuffer;
         }
 
         EVENT_CLASS_TYPE(MouseButtonReleased)
+    private:
+        mutable char m_StringBuffer[64];
     };
 
 } // namespace Core

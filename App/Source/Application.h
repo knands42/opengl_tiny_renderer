@@ -5,7 +5,7 @@
 #include <glad/gl.h>
 
 #include "Camera.h"
-#include "GLFW/glfw3.h"
+#include "Events/Event.h"
 #include "IndexBuffer.h"
 #include "Renderer.h"
 #include "Shader.h"
@@ -13,9 +13,6 @@
 #include "VertexArray.h"
 #include "VertexBuffer.h"
 #include "Window.h"
-
-constexpr unsigned int DEFAULT_WIDTH = 800;
-constexpr unsigned int DEFAULT_HEIGHT = 600;
 
 namespace App
 {
@@ -38,13 +35,12 @@ namespace App
         static Application& Get();
         static float GetTime();
 
+        void RaiseEvent(Core::Event& event);
 
     private:
-        unsigned int width = DEFAULT_WIDTH, height = DEFAULT_HEIGHT;
         ApplicationSpecification m_Specification;
         std::shared_ptr<Core::Window> m_Window;
         bool m_Running = false;
-
 
         // TODO: Remove heap allocation
         Core::Shader *m_Shader{};

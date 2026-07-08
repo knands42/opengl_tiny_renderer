@@ -3,6 +3,10 @@
 #include <cassert>
 #include <print>
 
+#include <GLFW/glfw3.h>
+
+#include "Events/WindowEvents.h"
+
 namespace Core
 {
 
@@ -51,6 +55,15 @@ namespace Core
         glfwSwapInterval(m_Specification.VSync ? 1 : 0);
         glfwSetWindowUserPointer(m_Window, this);
 
+        // handle events
+        glfwSetWindowCloseCallback(m_Window,
+                                   [](GLFWwindow *handle)
+                                   {
+                                       Window& window = *((Window *)glfwGetWindowUserPointer(handle));
+
+                                       WindowClosedEvent event;
+                                       window.RaiseEvent(event);
+                                   });
         // handle inputs
         // ---------------------------------------
         ProcessInput(m_Window);
@@ -75,6 +88,14 @@ namespace Core
     bool Window::ShouldClose() const
     {
         return glfwWindowShouldClose(m_Window) != 0;
+    }
+
+    void Window::RaiseEvent(Event& event)
+    {
+        if (m_Specification.EventCallback)
+        {
+            m_Specification.EventCallback(event);
+        }
     }
 
     glm::vec2 Window::GetFrameBufferSize() const

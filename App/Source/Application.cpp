@@ -9,6 +9,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Events/WindowEvents.h"
 #include "Renderer.h"
 #include "Window.h"
 
@@ -49,6 +50,8 @@ namespace App
         {
             m_Specification.WindowSpec.Title = spec.Name;
         }
+
+        m_Specification.WindowSpec.EventCallback = [this](Core::Event& event) { RaiseEvent(event); };
 
         m_Window = std::make_shared<Core::Window>(m_Specification.WindowSpec);
         m_Window->Create();
@@ -212,9 +215,10 @@ namespace App
             m_Shader->Bind();
             m_Shader->SetUniformMat4f("u_Model", m_Camera->GetModelMatrix());
             m_Shader->SetUniformMat4f("u_View", m_Camera->GetViewMatrix(glm::vec3(0.0f)));
-            m_Shader->SetUniformMat4f("u_Projection",
-                                      m_Camera->GetProjectionMatrix(glm::radians(45.0f), static_cast<float>(width),
-                                                                    static_cast<float>(height), 0.1f, 100.0f));
+            m_Shader->SetUniformMat4f(
+                "u_Projection",
+                m_Camera->GetProjectionMatrix(glm::radians(45.0f), static_cast<float>(m_Specification.WindowSpec.Width),
+                                              static_cast<float>(m_Specification.WindowSpec.Width), 0.1f, 100.0f));
 
             m_Renderer.Draw(*m_VertexArray, *m_Shader, *m_Texture);
 
@@ -237,5 +241,16 @@ namespace App
     float Application::GetTime()
     {
         return static_cast<float>(glfwGetTime());
+    }
+
+    void Application::RaiseEvent(Core::Event& event)
+    {
+        Core::EventDispatcher dispatcher(event);
+        dispatcher.Dispatch<Core::WindowClosedEvent>(
+            [this](Core::Event& event)
+            {
+                printf("Event here");
+                return true;
+            });
     }
 } // namespace App
