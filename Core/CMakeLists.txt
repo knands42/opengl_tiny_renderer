@@ -1,4 +1,5 @@
 set(SOURCES
+        Vendor/stb_image.h
         Vendor/stb_image.cpp
 
         Source/GLError.h
@@ -26,14 +27,22 @@ set(SOURCES
 
         Source/VertexBufferLayout.h
         Source/VertexBufferLayout.cpp
+
+        Source/Window.h
+        Source/Window.cpp
 )
 
 add_library(Core STATIC)
 target_sources(Core PRIVATE ${SOURCES})
 
-target_link_libraries(Core glfw)
-target_link_libraries(Core glad)
-target_link_libraries(Core glm)
+add_compile_definitions(
+    GLFW_INCLUDE_NONE
+)
+
+target_link_libraries(Core PUBLIC glfw)
+target_link_libraries(Core PUBLIC glad)
+target_link_libraries(Core PUBLIC glm)
+
 
 target_include_directories(Core
         PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Source

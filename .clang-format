@@ -19,4 +19,13 @@ AlignAfterOpenBracket: Align
 AlignOperands: Align
 ContinuationIndentWidth: 4
 
-SortIncludes: false
+SortIncludes: CaseSensitive
+IncludeBlocks: Regroup
+IncludeIsMainRegex: '$'
+IncludeCategories:
+  - Regex:    '^<[^/]+>$'          # C++ std / system, no slash: <fstream>
+    Priority: 2
+  - Regex:    '^<.*/'              # third-party with path: <GLFW/..>, <glm/..>
+    Priority: 3
+  - Regex:    '^".*"'              # project headers: "Renderer.h"
+    Priority: 4

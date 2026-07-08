@@ -4,6 +4,7 @@ project(opengl_tiny_renderer LANGUAGES CXX C)
 
 set(CMAKE_CXX_STANDARD 26)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_COMPILER clang++)
 
 # Dependencies
 include(Dependencies.cmake)

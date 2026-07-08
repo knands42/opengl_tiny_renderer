@@ -1,3 +1,0 @@
-CompileFlags:
-    Add:
-        - --query-driver=/usr/bin/g++
