@@ -3,8 +3,9 @@
 #include <memory>
 
 #include <glad/gl.h>
-#include "GLFW/glfw3.h"
+
 #include "Camera.h"
+#include "GLFW/glfw3.h"
 #include "IndexBuffer.h"
 #include "Renderer.h"
 #include "Shader.h"
@@ -37,12 +38,15 @@ namespace App
         static Application& Get();
         static float GetTime();
 
+
     private:
         unsigned int width = DEFAULT_WIDTH, height = DEFAULT_HEIGHT;
         ApplicationSpecification m_Specification;
         std::shared_ptr<Core::Window> m_Window;
         bool m_Running = false;
 
+
+        // TODO: Remove heap allocation
         Core::Shader *m_Shader{};
         Core::VertexBuffer *m_VertexBuffer{};
         Core::IndexBuffer *m_IndexBuffer{};

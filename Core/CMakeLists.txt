@@ -1,35 +1,10 @@
-set(SOURCES
-        Vendor/stb_image.h
-        Vendor/stb_image.cpp
-
-        Source/GLError.h
-
-        Source/Camera.h
-        Source/Camera.cpp
-
-        Source/IndexBuffer.h
-        Source/IndexBuffer.cpp
-
-        Source/Renderer.h
-        Source/Renderer.cpp
-
-        Source/Shader.h
-        Source/Shader.cpp
-
-        Source/Texture.h
-        Source/Texture.cpp
-
-        Source/VertexArray.h
-        Source/VertexArray.cpp
-
-        Source/VertexBuffer.h
-        Source/VertexBuffer.cpp
-
-        Source/VertexBufferLayout.h
-        Source/VertexBufferLayout.cpp
-
-        Source/Window.h
-        Source/Window.cpp
+file(GLOB SOURCES
+    Vendor/stb_image.h
+    Vendor/stb_image.cpp
+    Source/*.h
+    Source/*.cpp
+    Source/Events/*.h
+    Source/Events/*.cpp
 )
 
 add_library(Core STATIC)
