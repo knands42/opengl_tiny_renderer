@@ -6,6 +6,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+namespace App {
+    
 Application::~Application()
 {
     glfwTerminate();
@@ -77,31 +79,31 @@ Application::Application()
 
     GLCall(glEnable(GL_DEPTH_TEST))
 
-    auto *vertexBuffer = new VertexBuffer(vertices, sizeof(vertices));
+    auto *vertexBuffer = new Core::VertexBuffer(vertices, sizeof(vertices));
     m_VertexBuffer = vertexBuffer;
 
-    VertexBufferLayout layout;
+    Core::VertexBufferLayout layout;
     layout.Push<float>(3); // positions
     layout.Push<float>(2); // textures
 
-    VertexArray *vertexArray = new VertexArray();
+    Core::VertexArray *vertexArray = new Core::VertexArray();
     m_VertexArray = vertexArray;
     m_VertexArray->AddBuffer(*m_VertexBuffer, layout);
 
-    Shader *shader = new Shader("Shaders/vertex.glsl", "Shaders/fragment.glsl");
+    Core::Shader *shader = new Core::Shader("Shaders/vertex.glsl", "Shaders/fragment.glsl");
     shader->Bind();
     m_Shader = shader;
 
-    Texture *texture = new Texture("Textures/wall.jpg");
+    Core::Texture *texture = new Core::Texture("Textures/wall.jpg");
     texture->Bind();
     shader->SetUniform1i("u_Texture", 0);
     m_Texture = texture;
 
-    Camera *camera = new Camera();
+    Core::Camera *camera = new Core::Camera();
     camera->SetPosition(glm::vec3(0.0f, 0.0f, 3.0f));
     m_Camera = camera;
 
-    constexpr Renderer renderer;
+    constexpr Core::Renderer renderer;
     m_Renderer = renderer;
 }
 
@@ -157,4 +159,5 @@ void Application::ProcessInput(GLFWwindow *window)
     {
         glfwSetWindowShouldClose(window, true);
     }
+}
 }

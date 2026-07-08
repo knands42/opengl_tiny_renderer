@@ -3,7 +3,7 @@
 
 int main()
 {
-    const Application app;
+    const App::Application app;
     app.Run();
 
     return 0;

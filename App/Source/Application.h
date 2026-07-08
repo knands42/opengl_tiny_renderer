@@ -14,33 +14,37 @@
 constexpr unsigned int DEFAULT_WIDTH = 800;
 constexpr unsigned int DEFAULT_HEIGHT = 600;
 
-class Application
+namespace App
 {
-public:
-    Application();
-    ~Application();
+    class Application
+    {
+    public:
+        Application();
+        ~Application();
 
-    auto Run() const -> void;
-private:
-    unsigned int width = DEFAULT_WIDTH, height = DEFAULT_HEIGHT;
-    GLFWwindow *window = nullptr;
-    Shader *m_Shader{};
-    VertexBuffer *m_VertexBuffer{};
-    IndexBuffer *m_IndexBuffer{};
-    VertexArray *m_VertexArray{};
-    Texture *m_Texture{};
-    Camera *m_Camera{};
-    Renderer m_Renderer;
+        auto Run() const -> void;
 
-    void MainLoop() const;
+    private:
+        unsigned int width = DEFAULT_WIDTH, height = DEFAULT_HEIGHT;
+        GLFWwindow *window = nullptr;
+        Core::Shader *m_Shader{};
+        Core::VertexBuffer *m_VertexBuffer{};
+        Core::IndexBuffer *m_IndexBuffer{};
+        Core::VertexArray *m_VertexArray{};
+        Core::Texture *m_Texture{};
+        Core::Camera *m_Camera{};
+        Core::Renderer m_Renderer;
 
-    // glfw: whenever the window size changed (by OS or user resize) this callback
-    // function executes
-    // ---------------------------------------------------------------------------------------------
-    static void FramebufferSizeCallback(GLFWwindow *window, int width, int height);
+        void MainLoop() const;
 
-    // process all input: query GLFW whether relevant keys are pressed/released this
-    // frame and react accordingly
-    // ---------------------------------------------------------------------------------------------------------
-    static void ProcessInput(GLFWwindow *window);
-};
+        // glfw: whenever the window size changed (by OS or user resize) this callback
+        // function executes
+        // ---------------------------------------------------------------------------------------------
+        static void FramebufferSizeCallback(GLFWwindow *window, int width, int height);
+
+        // process all input: query GLFW whether relevant keys are pressed/released this
+        // frame and react accordingly
+        // ---------------------------------------------------------------------------------------------------------
+        static void ProcessInput(GLFWwindow *window);
+    };
+} // namespace App
