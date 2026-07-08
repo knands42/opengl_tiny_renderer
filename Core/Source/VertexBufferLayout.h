@@ -1,6 +1,7 @@
 #pragma once
-#include <ranges>
+
 #include <vector>
+#include "glad/gl.h"
 
 #include "GLError.h"
 

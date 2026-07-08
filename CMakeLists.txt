@@ -8,6 +8,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Dependencies
 include(Dependencies.cmake)
 
+# Generate compile_commands.json
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # Submodules
 add_subdirectory(App)
 add_subdirectory(Core)

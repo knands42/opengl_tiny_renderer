@@ -1,7 +1,5 @@
 #pragma once
 
-#include "glad/gl.h"
-
 #define ASSERT(x)                                                                                                      \
     if (!(x))                                                                                                          \
         __builtin_trap();

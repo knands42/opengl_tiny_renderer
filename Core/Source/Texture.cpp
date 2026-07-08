@@ -2,6 +2,7 @@
 
 #include "GLError.h"
 #include "stb_image.h"
+#include "glad/gl.h"
 
 namespace Core
 {

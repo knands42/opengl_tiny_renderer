@@ -1,11 +1,11 @@
 #include "Shader.h"
+#include "GLError.h"
 
 #include <fstream>
 #include <iostream>
 #include <GLFW/glfw3.h>
 #include <glm/gtc/type_ptr.hpp>
-
-#include "Renderer.h"
+#include <sstream>
 
 namespace Core
 {
@@ -43,8 +43,8 @@ namespace Core
 
     auto Shader::SetUniform4f(const char *name, glm::vec4 vector) const -> void
     {
-        const float timeValue = glfwGetTime();
-        const float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
+        const auto timeValue = static_cast<float>(glfwGetTime());
+        const float greenValue = (std::sin(timeValue) / 2.0f) + 0.5f;
         const int vertexColorLocation = GetUniformLocation(name);
         ASSERT(vertexColorLocation != -1);
         GLCall(glUniform4f(vertexColorLocation, vector.x, greenValue, vector.z, vector.w));
@@ -60,7 +60,7 @@ namespace Core
         GLCall(glUniform1i(GetUniformLocation(name), value));
     }
 
-    auto Shader::SetUniformMat4f(const char *name, const glm::mat4 &matrix) const -> void
+    auto Shader::SetUniformMat4f(const char *name, const glm::mat4& matrix) const -> void
     {
         GLCall(glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(matrix)));
     }

@@ -1,7 +1,5 @@
 #include "VertexArray.h"
 
-#include "Renderer.h"
-
 namespace Core
 {
 
