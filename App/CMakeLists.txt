@@ -35,9 +35,7 @@ set(SOURCES
 add_executable(App)
 target_sources(App PRIVATE ${SOURCES})
 
-target_link_libraries(App glfw)
-target_link_libraries(App glad)
-target_link_libraries(App glm)
+target_link_libraries(App Core)
 
 target_include_directories(App
         PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Source

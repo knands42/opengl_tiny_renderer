@@ -10,6 +10,7 @@ include(Dependencies.cmake)
 
 # Submodules
 add_subdirectory(App)
+add_subdirectory(Core)
 
 add_custom_target(run
         COMMAND App
