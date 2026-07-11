@@ -6,8 +6,6 @@
 #include <glm/ext/quaternion_geometric.hpp>
 #include <glm/trigonometric.hpp>
 
-#include "Events/InputEvents.h"
-
 namespace Core
 {
     Camera::Camera() : m_Position(glm::vec3(0.0f))
@@ -18,19 +16,9 @@ namespace Core
     {
     }
 
-    glm::mat4 Camera::GetViewMatrix(const glm::vec3 at) const
+    glm::mat4 Camera::GetViewMatrix() const
     {
-        return glm::lookAt(m_Position, at, glm::vec3(0.0f, 1.0f, 0.0f));
-    }
-
-    glm::mat4 Camera::GetViewMatrix(const float yaw, const float pitch) const
-    {
-        glm::vec3 forward;
-        forward.x = -sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-        forward.y = sin(glm::radians(pitch));
-        forward.z = -cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-        forward = glm::normalize(forward);
-        return glm::lookAt(m_Position, m_Position + forward, glm::vec3(0.0f, 1.0f, 0.0f));
+        return glm::lookAt(m_Position, m_Position + m_CameraFront, m_CameraUp);
     }
 
     glm::mat4 Camera::GetProjectionMatrix(const float fov, const float width, const float height, const float nearPlane,
@@ -43,7 +31,7 @@ namespace Core
     {
         auto transform = glm::mat4(1.0f);
         transform = glm::translate(transform, modelMatrix.translation);
-        // transform = glm::rotate(transform, static_cast<float>(glfwGetTime()), glm::vec3(1.0f, 1.0f, 1.0f));
+        transform = glm::rotate(transform, static_cast<float>(glfwGetTime()), glm::vec3(1.0f, 1.0f, 1.0f));
         transform = glm::scale(transform, modelMatrix.scale);
         return transform;
     }
@@ -56,37 +44,70 @@ namespace Core
     void Camera::RaiseEvent(Event& event)
     {
         EventDispatcher dispatcher(event);
-        dispatcher.Dispatch<KeyPressedEvent>(
-            [this](KeyPressedEvent& event)
-            {
-                float currentFrame = glfwGetTime();
-                float deltaTime = currentFrame - m_LastFrame;
-                m_LastFrame = currentFrame;
-                
-                const float cameraSpeed = 0.05f;
-                const glm::vec3 cameraFrontTranslation = m_CameraFront * cameraSpeed;
-                const glm::vec3 cameraRightTranslation =
-                    glm::normalize(glm::cross(m_CameraFront, m_CameraUp)) * cameraSpeed;
-                
-                switch (event.GetKeyCode())
-                {
-                case GLFW_KEY_W:
-                    m_Position += cameraFrontTranslation;
-                    break;
-                case GLFW_KEY_S:
-                    m_Position -= cameraFrontTranslation;
-                    break;
-                case GLFW_KEY_A:
-                    m_Position += cameraRightTranslation;
-                    break;
-                case GLFW_KEY_D:
-                    m_Position -= cameraRightTranslation;
-                    break;
-                default:
-                    return false;
-                }
+        dispatcher.Dispatch<KeyPressedEvent>(this { return HandleKeyPressedEvent(*this, e); });
+        dispatcher.Dispatch<MouseMovedEvent>(this { return HandleMouseMovedEvent(*this, e); });
+    }
 
-                return true;
-            });
+    bool Camera::HandleKeyPressedEvent(Camera& camera, KeyPressedEvent& event)
+    {
+        float currentFrame = glfwGetTime();
+        float deltaTime = currentFrame - camera.m_LastFrame;
+        camera.m_LastFrame = currentFrame;
+
+        const float cameraSpeed = 0.05f;
+        const glm::vec3 cameraFrontTranslation = camera.m_CameraFront * cameraSpeed;
+        const glm::vec3 cameraRightTranslation =
+            glm::normalize(glm::cross(camera.m_CameraFront, camera.m_CameraUp)) * cameraSpeed;
+
+        switch (event.GetKeyCode())
+        {
+        case GLFW_KEY_W:
+            camera.m_Position += cameraFrontTranslation;
+            break;
+        case GLFW_KEY_S:
+            camera.m_Position -= cameraFrontTranslation;
+            break;
+        case GLFW_KEY_A:
+            camera.m_Position += cameraRightTranslation;
+            break;
+        case GLFW_KEY_D:
+            camera.m_Position -= cameraRightTranslation;
+            break;
+        default:
+            return false;
+        }
+
+        return true;
+    }
+
+    bool Camera::HandleMouseMovedEvent(Camera& camera, MouseMovedEvent& event)
+    {
+        float xoffset = event.GetX() - camera.m_LastX;
+        float yoffset = event.GetY() - camera.m_LastY;
+        camera.m_LastX = event.GetX();
+        camera.m_LastY = event.GetY();
+
+        const float sensitivity = 0.1f;
+        xoffset *= sensitivity;
+        yoffset *= sensitivity;
+
+        camera.m_CurrentYaw += xoffset;
+        camera.m_CurrentPitch += yoffset;
+
+        if (camera.m_CurrentPitch > 89.0f)
+            camera.m_CurrentPitch = 89.0f;
+        if (camera.m_CurrentPitch < -89.0f)
+            camera.m_CurrentPitch = -89.0f;
+
+        camera.RecomputeViewMatrix(camera.m_CurrentPitch, camera.m_CurrentPitch);
+        return true;
+    }
+
+    void Camera::RecomputeViewMatrix(float yaw, float pitch)
+    {
+        m_CameraFront.x = -sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+        m_CameraFront.y = sin(glm::radians(pitch));
+        m_CameraFront.z = -cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+        m_CameraFront = glm::normalize(m_CameraFront);
     }
 } // namespace Core

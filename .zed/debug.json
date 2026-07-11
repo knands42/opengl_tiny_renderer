@@ -1,0 +1,11 @@
+[
+  {
+    "adapter": "lldb-dap",
+    "label": "Debug App",
+    "request": "launch",
+    "program": "${ZED_WORKTREE_ROOT}/build/App/App",
+    "args": [],
+    "cwd": "${ZED_WORKTREE_ROOT}/App",
+    "env": {},
+  },
+]

@@ -244,7 +244,7 @@ namespace App
             m_Renderer.Clear();
             m_Shader->Bind();
             m_Shader->SetUniformMat4f("u_Model", m_Camera->GetModelMatrix(modelMatrix));
-            m_Shader->SetUniformMat4f("u_View", m_Camera->GetViewMatrix(glm::vec3(0.0f)));
+            m_Shader->SetUniformMat4f("u_View", m_Camera->GetViewMatrix());
             m_Shader->SetUniformMat4f(
                 "u_Projection",
                 m_Camera->GetProjectionMatrix(glm::radians(45.0f), static_cast<float>(m_Specification.WindowSpec.Width),

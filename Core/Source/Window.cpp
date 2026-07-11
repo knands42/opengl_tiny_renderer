@@ -68,6 +68,9 @@ namespace Core
         // handle inputs
         // ---------------------------------------
         ProcessInput(m_Window);
+        
+        glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        glfwSetCursorPosCallback(m_Window, MouseCallback);
     }
 
     void Window::Destroy()
@@ -141,4 +144,11 @@ namespace Core
             RaiseEvent(event);
         }
     }
+
+    void Window::MouseCallback(GLFWwindow* window, double xpos, double ypos) {
+        Window& self = *static_cast<Window*>(glfwGetWindowUserPointer(window));
+        MouseMovedEvent event(static_cast<float>(xpos), static_cast<float>(ypos));
+        self.RaiseEvent(event);
+    }
+
 } // namespace Core
