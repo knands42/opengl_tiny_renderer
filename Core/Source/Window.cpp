@@ -82,6 +82,7 @@ namespace Core
 
     void Window::Update()
     {
+        ProcessInput(m_Window);
         glfwSwapBuffers(m_Window);
         glfwPollEvents();
     }
