@@ -5,8 +5,8 @@ int main()
 {
     App::ApplicationSpecification appSpec = App::ApplicationSpecification();
    	appSpec.Name = "OpenGL Tiny Renderer";
-	appSpec.WindowSpec.Width = 1920;
-	appSpec.WindowSpec.Height = 1080;
+	appSpec.WindowSpec.Width = 800;
+	appSpec.WindowSpec.Height = 600;
 	
     App::Application app(appSpec);
     app.Run();

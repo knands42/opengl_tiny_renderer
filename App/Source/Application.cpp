@@ -276,12 +276,7 @@ namespace App
 
     void Application::RaiseEvent(Core::Event& event)
     {
+        m_Camera->RaiseEvent(event);
         Core::EventDispatcher dispatcher(event);
-        dispatcher.Dispatch<Core::WindowClosedEvent>(
-            [this](Core::Event& event)
-            {
-                printf("Event here");
-                return true;
-            });
     }
 } // namespace App

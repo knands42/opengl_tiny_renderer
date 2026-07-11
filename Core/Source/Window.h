@@ -31,14 +31,17 @@ namespace Core
         void Create();
         void Destroy();
         void Update();
-        bool ShouldClose() const;
+        [[nodiscard]] auto ShouldClose() const -> bool;
 
-        [[nodiscard]] GLFWwindow *GetNativeWindow() const { return m_Window; }
+        [[nodiscard]] auto GetNativeWindow() const -> GLFWwindow *
+        {
+            return m_Window;
+        }
 
         void RaiseEvent(Event& event);
 
-        glm::vec2 GetFrameBufferSize() const;
-        glm::vec2 GetMousePos() const;
+        [[nodiscard]] auto GetFrameBufferSize() const -> glm::vec2;
+        [[nodiscard]] auto GetMousePos() const -> glm::vec2;
 
     private:
         WindowSpecification m_Specification;

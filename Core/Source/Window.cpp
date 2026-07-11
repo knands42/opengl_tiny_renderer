@@ -5,6 +5,7 @@
 
 #include <GLFW/glfw3.h>
 
+#include "Events/InputEvents.h"
 #include "Events/WindowEvents.h"
 
 namespace Core
@@ -98,14 +99,14 @@ namespace Core
         }
     }
 
-    glm::vec2 Window::GetFrameBufferSize() const
+    auto Window::GetFrameBufferSize() const -> glm::vec2
     {
         int width, height;
         glfwGetFramebufferSize(m_Window, &width, &height);
         return {width, height};
     }
 
-    glm::vec2 Window::GetMousePos() const
+    auto Window::GetMousePos() const -> glm::vec2
     {
         double x, y;
         glfwGetCursorPos(m_Window, &x, &y);
@@ -117,6 +118,26 @@ namespace Core
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         {
             glfwSetWindowShouldClose(window, true);
+        }
+        if (glfwGetKey(window, GLFW_KEY_W))
+        {
+            KeyPressedEvent event(GLFW_KEY_W, true);
+            RaiseEvent(event);
+        }
+        if (glfwGetKey(window, GLFW_KEY_S))
+        {
+            KeyPressedEvent event(GLFW_KEY_S, true);
+            RaiseEvent(event);
+        }
+        if (glfwGetKey(window, GLFW_KEY_A))
+        {
+            KeyPressedEvent event(GLFW_KEY_A, true);
+            RaiseEvent(event);
+        }
+        if (glfwGetKey(window, GLFW_KEY_D))
+        {
+            KeyPressedEvent event(GLFW_KEY_D, true);
+            RaiseEvent(event);
         }
     }
 } // namespace Core

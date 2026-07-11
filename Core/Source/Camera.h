@@ -2,6 +2,7 @@
 
 #include <glm/ext/matrix_float4x4.hpp>
 #include <glm/trigonometric.hpp>
+#include "Events/Event.h"
 
 namespace Core
 {
@@ -26,6 +27,8 @@ namespace Core
         [[nodiscard]] glm::mat4 GetProjectionMatrix(float fov, float width, float height, float nearPlane,
                                                     float farPlane) const;
         [[nodiscard]] glm::mat4 GetModelMatrix(ModelMatrix& modelMatrix) const;
+        void RaiseEvent(Event& event);
+        
         void SetPosition(glm::vec3 position);
     };
 } // namespace Core

@@ -5,6 +5,8 @@
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/trigonometric.hpp>
 
+#include "Events/InputEvents.h"
+
 namespace Core
 {
     Camera::Camera() : m_Position(glm::vec3(0.0f))
@@ -48,5 +50,32 @@ namespace Core
     void Camera::SetPosition(const glm::vec3 position)
     {
         m_Position = position;
+    }
+
+    void Camera::RaiseEvent(Event& event)
+    {
+        EventDispatcher dispatcher(event);
+        dispatcher.Dispatch<KeyPressedEvent>(
+            [this](KeyPressedEvent& event)
+            {
+                if (!event.IsRepeat())
+                    return false;
+
+                const float cameraSpeed = 1.0f;
+                switch (event.GetKeyCode())
+                {
+                case GLFW_KEY_W:
+                    m_Position += glm::vec3(0.0f, 0.0f, 1.0f) * cameraSpeed;
+                    break;
+                case GLFW_KEY_S:
+                    break;
+                case GLFW_KEY_A:
+                    break;
+                case GLFW_KEY_D:
+                    break;
+                }
+
+                return true;
+            });
     }
 } // namespace Core

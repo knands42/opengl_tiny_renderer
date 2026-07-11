@@ -35,4 +35,4 @@ On `CLion` before running the program, set the working directory in CLion's run 
 
 1. Go to Run → Edit Configurations…
 2. Select your opengl target
-3. Set Working directory to: \$ProjectFileDir\$
+3. Set Working directory to: \\$ProjectFileDir\\$
