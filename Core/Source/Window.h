@@ -4,8 +4,8 @@
 #include <stdint.h>
 
 #include <GLFW/glfw3.h>
-#include <glad/gl.h>
 #include <glm/glm.hpp>
+
 #include "Events/Event.h"
 
 namespace Core
@@ -32,6 +32,8 @@ namespace Core
         void Destroy();
         void Update();
         bool ShouldClose() const;
+
+        [[nodiscard]] GLFWwindow *GetNativeWindow() const { return m_Window; }
 
         void RaiseEvent(Event& event);
 

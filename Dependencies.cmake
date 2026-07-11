@@ -11,20 +11,20 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(imgui)
 
-# ImGui core sources
-set(IMGUI_SOURCES
-        ${imgui_SOURCE_DIR}/imgui.cpp
-        ${imgui_SOURCE_DIR}/imgui_demo.cpp
-        ${imgui_SOURCE_DIR}/imgui_draw.cpp
-        ${imgui_SOURCE_DIR}/imgui_tables.cpp
-        ${imgui_SOURCE_DIR}/imgui_widgets.cpp
+add_library(imgui STATIC
+          ${imgui_SOURCE_DIR}/imgui.cpp
+          ${imgui_SOURCE_DIR}/imgui_draw.cpp
+          ${imgui_SOURCE_DIR}/imgui_tables.cpp
+          ${imgui_SOURCE_DIR}/imgui_widgets.cpp
+          ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
+          ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
 )
-
-# ImGui backends (GLFW + OpenGL3)
-set(IMGUI_BACKEND_SOURCES
-        ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
-        ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
+target_include_directories(imgui PUBLIC
+          ${imgui_SOURCE_DIR}
+          ${imgui_SOURCE_DIR}/backends
 )
+target_compile_definitions(imgui PRIVATE IMGUI_IMPL_OPENGL_LOADER_GLAD)
+target_link_libraries(imgui PUBLIC glfw OpenGL::GL glad)
 
 # GLFW
 find_package(glfw3 3.4 QUIET)

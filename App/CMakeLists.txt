@@ -5,10 +5,7 @@ set(SOURCES
         Source/Application.cpp
 )
 
-add_executable(App
-  # ${IMGUI_SOURCES}
-  # ${IMGUI_BACKEND_SOURCES}
-)
+add_executable(App)
 
 target_sources(App PRIVATE ${SOURCES})
 
@@ -16,11 +13,9 @@ add_compile_definitions(
     GLFW_INCLUDE_NONE
 )
 
-target_link_libraries(App Core)
+target_link_libraries(App Core imgui)
 
 target_include_directories(App
-        # ${imgui_SOURCE_DIR}
-        # ${imgui_SOURCE_DIR}/backends
         PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Source
         PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Shaders
         PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Textures

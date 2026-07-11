@@ -16,6 +16,9 @@
 #include "Texture.h"
 #include "VertexArray.h"
 #include "Window.h"
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 
 namespace App
 {
@@ -188,6 +191,18 @@ namespace App
 
         constexpr Core::Renderer renderer;
         m_Renderer = renderer;
+
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImGuiIO& io = ImGui::GetIO();
+        (void)io;
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+
+        ImGui::StyleColorsDark();
+
+        ImGui_ImplGlfw_InitForOpenGL(m_Window->GetNativeWindow(), true);
+        ImGui_ImplOpenGL3_Init("#version 130");
     }
 
     auto Application::Stop() -> void
