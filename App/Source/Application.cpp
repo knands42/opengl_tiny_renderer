@@ -9,8 +9,12 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Camera.h"
 #include "Events/WindowEvents.h"
 #include "Renderer.h"
+#include "Shader.h"
+#include "Texture.h"
+#include "VertexArray.h"
 #include "Window.h"
 
 namespace App
@@ -25,17 +29,15 @@ namespace App
 
     Application::~Application()
     {
-        // TODO: Do not use heap allocation
         delete m_VertexBuffer;
+        delete m_IndexBuffer;
         delete m_VertexArray;
-        delete m_Shader;
         delete m_Texture;
         delete m_Camera;
+        delete m_Shader;
 
         m_Window->Destroy();
-
         glfwTerminate();
-
         s_Application = nullptr;
     }
 
@@ -156,11 +158,11 @@ namespace App
             1.0f,
         };
 
-        GLCall(glEnable(GL_BLEND)) GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA))
+        GLCall(glEnable(GL_BLEND));
+        GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+        GLCall(glEnable(GL_DEPTH_TEST));
 
-            GLCall(glEnable(GL_DEPTH_TEST))
-
-                auto *vertexBuffer = new Core::VertexBuffer(vertices, sizeof(vertices));
+        auto *vertexBuffer = new Core::VertexBuffer(vertices, sizeof(vertices));
         m_VertexBuffer = vertexBuffer;
 
         Core::VertexBufferLayout layout;
@@ -218,7 +220,7 @@ namespace App
             m_Shader->SetUniformMat4f(
                 "u_Projection",
                 m_Camera->GetProjectionMatrix(glm::radians(45.0f), static_cast<float>(m_Specification.WindowSpec.Width),
-                                              static_cast<float>(m_Specification.WindowSpec.Width), 0.1f, 100.0f));
+                                              static_cast<float>(m_Specification.WindowSpec.Height), 0.1f, 100.0f));
 
             m_Renderer.Draw(*m_VertexArray, *m_Shader, *m_Texture);
 

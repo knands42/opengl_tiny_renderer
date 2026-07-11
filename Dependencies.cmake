@@ -3,6 +3,29 @@
 #
 include(FetchContent)
 
+# ImGui (docking branch)
+FetchContent_Declare(
+        imgui
+        GIT_REPOSITORY	https://github.com/ocornut/imgui.git
+        GIT_TAG		5a76f2adf1b0403b86a45010121fb32a6bff8680
+)
+FetchContent_MakeAvailable(imgui)
+
+# ImGui core sources
+set(IMGUI_SOURCES
+        ${imgui_SOURCE_DIR}/imgui.cpp
+        ${imgui_SOURCE_DIR}/imgui_demo.cpp
+        ${imgui_SOURCE_DIR}/imgui_draw.cpp
+        ${imgui_SOURCE_DIR}/imgui_tables.cpp
+        ${imgui_SOURCE_DIR}/imgui_widgets.cpp
+)
+
+# ImGui backends (GLFW + OpenGL3)
+set(IMGUI_BACKEND_SOURCES
+        ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
+        ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
+)
+
 # GLFW
 find_package(glfw3 3.4 QUIET)
 if (NOT glfw3_FOUND)

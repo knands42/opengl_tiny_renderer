@@ -41,7 +41,7 @@ namespace Core
 
         const char *ToString() const override
         {
-            snprintf(m_StringBuffer, sizeof(m_StringBuffer), "KeyPressedEvent: {} (repeat={})", m_KeyCode, m_IsRepeat);
+            snprintf(m_StringBuffer, sizeof(m_StringBuffer), "KeyPressedEvent: %d (repeat=%d)", m_KeyCode, m_IsRepeat);
             return m_StringBuffer;
         }
 
@@ -60,7 +60,7 @@ namespace Core
 
         const char *ToString() const override
         {
-            snprintf(m_StringBuffer, sizeof(m_StringBuffer), "KeyReleasedEvent: {}", m_KeyCode);
+            snprintf(m_StringBuffer, sizeof(m_StringBuffer), "KeyReleasedEvent: %d", m_KeyCode);
             return m_StringBuffer;
         }
 
@@ -154,7 +154,7 @@ namespace Core
 
         const char *ToString() const override
         {
-            snprintf(m_StringBuffer, sizeof(m_StringBuffer), "MouseButtonPressedEvent: {}", m_Button);
+            snprintf(m_StringBuffer, sizeof(m_StringBuffer), "MouseButtonPressedEvent: %d", m_Button);
             return m_StringBuffer;
         }
 
@@ -172,7 +172,7 @@ namespace Core
 
         const char *ToString() const override
         {
-            snprintf(m_StringBuffer, sizeof(m_StringBuffer), "MouseButtonReleasedEvent: {}", m_Button);
+            snprintf(m_StringBuffer, sizeof(m_StringBuffer), "MouseButtonReleasedEvent: %d", m_Button);
             return m_StringBuffer;
         }
 

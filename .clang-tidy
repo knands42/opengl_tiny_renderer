@@ -1,4 +1,4 @@
-Checks: 'cppcoreguidelines-*,modernize-*,bugprone-*,performance-*',-cppcoreguidelines-special-member-functions'
+Checks: 'cppcoreguidelines-*,modernize-*,bugprone-*,performance-*,-cppcoreguidelines-special-member-functions'
 WarningsAsErrors: ''
 HeaderFilterRegex: '.*'
 FormatStyle: 'file'

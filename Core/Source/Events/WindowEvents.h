@@ -34,7 +34,7 @@ namespace Core
 
         const char *ToString() const override
         {
-            snprintf(m_StringBuffer, sizeof(m_StringBuffer), "WindowResizeEvent: {} {}", m_Width, m_Height);
+            snprintf(m_StringBuffer, sizeof(m_StringBuffer), "WindowResizeEvent: %.2d %.2d", m_Width, m_Height);
             return m_StringBuffer;
         }
 
