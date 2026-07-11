@@ -5,7 +5,7 @@ Learning OpenGL through [LeanOpenGL](https://learnopengl.com) and The Cherno's Y
 ## Showcase
 
 <img src="./assets/showcase.png">
-<video src="./assets/showcase.mp4" poster="./assets/showcase.png" autoplay loop muted controls style="max-width:100%"></video>
+![showcase](assets/showcase.gif)
 
 
 ## Prerequisites
@@ -15,7 +15,7 @@ Learning OpenGL through [LeanOpenGL](https://learnopengl.com) and The Cherno's Y
 
 ```sh
 # Install OpenGL
-sudo pacman -S opengl
+sudo pacman -S opengl cmake
 ```
 
 ### Build
