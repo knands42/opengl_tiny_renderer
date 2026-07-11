@@ -5,6 +5,8 @@ Learning OpenGL through [LeanOpenGL](https://learnopengl.com) and The Cherno's Y
 ## Showcase
 
 <img src="./assets/showcase.png">
+<video src="./assets/showcase.mp4" poster="./assets/showcase.png" autoplay loop muted controls style="max-width:100%"></video>
+
 
 ## Prerequisites
 

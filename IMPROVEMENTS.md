@@ -1,2 +1,2 @@
 - [ ] Add aspect ratio
-- [ ] Add events
+- [-] Add events
