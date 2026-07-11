@@ -4,9 +4,7 @@ Learning OpenGL through [LeanOpenGL](https://learnopengl.com) and The Cherno's Y
 
 ## Showcase
 
-<img src="./assets/showcase.png">
 ![showcase](assets/showcase.gif)
-
 
 ## Prerequisites
 
