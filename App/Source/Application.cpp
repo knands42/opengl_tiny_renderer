@@ -214,6 +214,7 @@ namespace App
     {
         m_Running = true;
         float lastTime = GetTime();
+        Core::ModelMatrix modelMatrix;
 
         while (m_Running)
         {
@@ -227,10 +228,22 @@ namespace App
             float timestep = glm::clamp(currentTime - lastTime, 0.001f, 0.1f);
             lastTime = currentTime;
 
+            // --- begin ImGui frame ---
+            ImGui_ImplOpenGL3_NewFrame();
+            ImGui_ImplGlfw_NewFrame();
+            ImGui::NewFrame();
+
+            // ImGui UI
+            ImGui::SliderFloat3("translation", &modelMatrix.translation.x, -1.0f, 1.0f, "%.3f");
+            ImGui::SliderFloat3("scale", &modelMatrix.scale.x, 0.1f, 2.0f, "%.3f");
+            ImGui::Text("Application average %.3f ms/frame", 1000.0f / ImGui::GetIO().Framerate);
+
+            ImGui::Render();
+
             // render
             m_Renderer.Clear();
             m_Shader->Bind();
-            m_Shader->SetUniformMat4f("u_Model", m_Camera->GetModelMatrix());
+            m_Shader->SetUniformMat4f("u_Model", m_Camera->GetModelMatrix(modelMatrix));
             m_Shader->SetUniformMat4f("u_View", m_Camera->GetViewMatrix(glm::vec3(0.0f)));
             m_Shader->SetUniformMat4f(
                 "u_Projection",
@@ -238,6 +251,7 @@ namespace App
                                               static_cast<float>(m_Specification.WindowSpec.Height), 0.1f, 100.0f));
 
             m_Renderer.Draw(*m_VertexArray, *m_Shader, *m_Texture);
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
             // check and call events and swap the buffers
             m_Window->Update();

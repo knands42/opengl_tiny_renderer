@@ -5,7 +5,12 @@
 
 namespace Core
 {
-
+    struct ModelMatrix
+    {
+        glm::vec3 translation = glm::vec3(0.5f, 0.5f, 0.0f);
+        glm::vec3 scale = glm::vec3(0.5f, 0.5f, 0.5f);
+    };
+    
     class Camera
     {
     private:
@@ -20,7 +25,7 @@ namespace Core
         [[nodiscard]] glm::mat4 GetViewMatrix(float yaw, float pitch) const;
         [[nodiscard]] glm::mat4 GetProjectionMatrix(float fov, float width, float height, float nearPlane,
                                                     float farPlane) const;
-        [[nodiscard]] glm::mat4 GetModelMatrix() const;
+        [[nodiscard]] glm::mat4 GetModelMatrix(ModelMatrix& modelMatrix) const;
         void SetPosition(glm::vec3 position);
     };
 } // namespace Core

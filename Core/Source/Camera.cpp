@@ -1,13 +1,12 @@
 #include "Camera.h"
 
 #include <GLFW/glfw3.h>
-#include <glm/trigonometric.hpp>
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/ext/matrix_transform.hpp>
+#include <glm/trigonometric.hpp>
 
 namespace Core
 {
-
     Camera::Camera() : m_Position(glm::vec3(0.0f))
     {
     }
@@ -37,12 +36,12 @@ namespace Core
         return glm::perspective(fov, width / height, nearPlane, farPlane);
     }
 
-    glm::mat4 Camera::GetModelMatrix() const
+    glm::mat4 Camera::GetModelMatrix(ModelMatrix& modelMatrix) const
     {
         auto transform = glm::mat4(1.0f);
-        transform = glm::translate(transform, glm::vec3(0.5f, 0.5f, 0.0f));
+        transform = glm::translate(transform, modelMatrix.translation);
         transform = glm::rotate(transform, static_cast<float>(glfwGetTime()), glm::vec3(1.0f, 1.0f, 1.0f));
-        transform = glm::scale(transform, glm::vec3(0.5f, 0.5f, 0.5f));
+        transform = glm::scale(transform, modelMatrix.scale);
         return transform;
     }
 
