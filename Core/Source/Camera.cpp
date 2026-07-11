@@ -1,5 +1,7 @@
 #include "Camera.h"
 
+#include <cstdlib>
+
 #include <GLFW/glfw3.h>
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/ext/matrix_transform.hpp>
@@ -16,18 +18,18 @@ namespace Core
     {
     }
 
-    glm::mat4 Camera::GetViewMatrix() const
+    auto Camera::GetViewMatrix() const -> glm::mat4
     {
         return glm::lookAt(m_Position, m_Position + m_CameraFront, m_CameraUp);
     }
 
-    glm::mat4 Camera::GetProjectionMatrix(const float fov, const float width, const float height, const float nearPlane,
-                                          const float farPlane) const
+    auto Camera::GetProjectionMatrix(const float fov, const float width, const float height, const float nearPlane,
+                                     const float farPlane) const -> glm::mat4
     {
         return glm::perspective(fov, width / height, nearPlane, farPlane);
     }
 
-    glm::mat4 Camera::GetModelMatrix(ModelMatrix& modelMatrix) const
+    auto Camera::GetModelMatrix(ModelMatrix& modelMatrix) const -> glm::mat4
     {
         auto transform = glm::mat4(1.0f);
         transform = glm::translate(transform, modelMatrix.translation);
@@ -44,13 +46,15 @@ namespace Core
     void Camera::RaiseEvent(Event& event)
     {
         EventDispatcher dispatcher(event);
-        dispatcher.Dispatch<KeyPressedEvent>(this { return HandleKeyPressedEvent(*this, e); });
-        dispatcher.Dispatch<MouseMovedEvent>(this { return HandleMouseMovedEvent(*this, e); });
+        dispatcher.Dispatch<KeyPressedEvent>([this](KeyPressedEvent& e) -> bool
+                                             { return HandleKeyPressedEvent(*this, e); });
+        dispatcher.Dispatch<MouseMovedEvent>([this](MouseMovedEvent& e) -> bool
+                                             { return HandleMouseMovedEvent(*this, e); });
     }
 
-    bool Camera::HandleKeyPressedEvent(Camera& camera, KeyPressedEvent& event)
+    auto Camera::HandleKeyPressedEvent(Camera& camera, KeyPressedEvent& event) -> bool
     {
-        float currentFrame = glfwGetTime();
+        float currentFrame = static_cast<float>(glfwGetTime());
         float deltaTime = currentFrame - camera.m_LastFrame;
         camera.m_LastFrame = currentFrame;
 
@@ -80,26 +84,26 @@ namespace Core
         return true;
     }
 
-    bool Camera::HandleMouseMovedEvent(Camera& camera, MouseMovedEvent& event)
+    auto Camera::HandleMouseMovedEvent(Camera& camera, MouseMovedEvent& event) -> bool
     {
-        float xoffset = event.GetX() - camera.m_LastX;
-        float yoffset = event.GetY() - camera.m_LastY;
-        camera.m_LastX = event.GetX();
-        camera.m_LastY = event.GetY();
+        float xoffset = static_cast<float>(event.GetX()) - camera.m_LastX;
+        float yoffset = static_cast<float>(event.GetY()) - camera.m_LastY;
+        camera.m_LastX = static_cast<float>(event.GetX());
+        camera.m_LastY = static_cast<float>(event.GetY());
 
         const float sensitivity = 0.1f;
         xoffset *= sensitivity;
         yoffset *= sensitivity;
 
-        camera.m_CurrentYaw += xoffset;
-        camera.m_CurrentPitch += yoffset;
+        camera.m_CurrentYaw -= xoffset;
+        camera.m_CurrentPitch -= yoffset;
 
         if (camera.m_CurrentPitch > 89.0f)
             camera.m_CurrentPitch = 89.0f;
         if (camera.m_CurrentPitch < -89.0f)
             camera.m_CurrentPitch = -89.0f;
 
-        camera.RecomputeViewMatrix(camera.m_CurrentPitch, camera.m_CurrentPitch);
+        camera.RecomputeViewMatrix(camera.m_CurrentYaw, camera.m_CurrentPitch);
         return true;
     }
 

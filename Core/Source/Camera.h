@@ -5,7 +5,6 @@
 
 #include "Events/Event.h"
 #include "Events/InputEvents.h"
-#include "Events/MouseMovedEvent.h"
 
 namespace Core
 {
