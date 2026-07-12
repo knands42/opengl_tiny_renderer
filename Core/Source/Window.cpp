@@ -56,9 +56,13 @@ namespace Core
         glfwSwapInterval(m_Specification.VSync ? 1 : 0);
         glfwSetWindowUserPointer(m_Window, this);
 
+        // set initial viewport
+        int fbW = 0, fbH = 0;
+        glfwGetFramebufferSize(m_Window, &fbW, &fbH);
+        glViewport(0, 0, fbW, fbH);
+        
         // handle events
         glfwSetWindowCloseCallback(m_Window, OnWindowClose);
-        glfwSetWindowSizeCallback(m_Window, OnWindowResize);
 
         // handle inputs
         // ---------------------------------------
@@ -149,9 +153,12 @@ namespace Core
 
     void Window::OnWindowResize(GLFWwindow *window, int width, int height)
     {
-        glViewport(0, 0, width, height);
+        int fbW = 0, fbH = 0;
+        glfwGetFramebufferSize(window, &fbW, &fbH);
+        glViewport(0, 0, fbW, fbH);
+        
         Window& self = *static_cast<Window *>(glfwGetWindowUserPointer(window));
-        WindowResizeEvent event(width, height);
+        WindowResizeEvent event(fbW, fbH);
         self.RaiseEvent(event);
     }
 
