@@ -236,7 +236,7 @@ namespace App
             ImGui::NewFrame();
 
             // ImGui UI
-            ImGui::SliderFloat3("translation", &modelMatrix.translation.x, -1.0f, 1.0f, "%.3f");
+            ImGui::SliderFloat3("translation", &modelMatrix.translation.x, -1.5f, 1.5f, "%.3f");
             ImGui::SliderFloat3("scale", &modelMatrix.scale.x, 0.1f, 2.0f, "%.3f");
             ImGui::Text("Application average %.3f ms/frame", 1000.0f / ImGui::GetIO().Framerate);
 

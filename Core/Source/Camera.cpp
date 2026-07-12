@@ -72,10 +72,10 @@ namespace Core
             camera.m_Position -= cameraFrontTranslation;
             break;
         case GLFW_KEY_A:
-            camera.m_Position += cameraRightTranslation;
+            camera.m_Position -= cameraRightTranslation;
             break;
         case GLFW_KEY_D:
-            camera.m_Position -= cameraRightTranslation;
+            camera.m_Position += cameraRightTranslation;
             break;
         case GLFW_KEY_SPACE:
             camera.m_Position += camera.m_CameraUp * cameraSpeed;
@@ -115,6 +115,7 @@ namespace Core
 
     bool Camera::HandleWindowScrollEvent(Camera& camera, WindowScrollEvent& event)
     {
+        // TODO: fix infinite zoom (clamp m_Fov to [1.0f, 45.0f])
         auto sensitivity = 0.1f;
         camera.m_Fov -= static_cast<float>(event.GetYOffset()) * sensitivity;
         if (camera.m_Fov < 1.0f)
