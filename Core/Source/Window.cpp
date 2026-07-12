@@ -7,6 +7,7 @@
 
 #include "Events/InputEvents.h"
 #include "Events/WindowEvents.h"
+#include "glad/gl.h"
 
 namespace Core
 {
@@ -42,8 +43,7 @@ namespace Core
         }
 
         glfwMakeContextCurrent(m_Window);
-        glfwSetFramebufferSizeCallback(m_Window, [](GLFWwindow *window, const int width, const int height)
-                                       { glViewport(0, 0, width, height); });
+        glfwSetFramebufferSizeCallback(m_Window, OnWindowResize);
 
         // glad: load all OpenGL function pointers
         // ---------------------------------------
@@ -57,20 +57,15 @@ namespace Core
         glfwSetWindowUserPointer(m_Window, this);
 
         // handle events
-        glfwSetWindowCloseCallback(m_Window,
-                                   [](GLFWwindow *handle)
-                                   {
-                                       Window& window = *((Window *)glfwGetWindowUserPointer(handle));
+        glfwSetWindowCloseCallback(m_Window, OnWindowClose);
+        glfwSetWindowSizeCallback(m_Window, OnWindowResize);
 
-                                       WindowClosedEvent event;
-                                       window.RaiseEvent(event);
-                                   });
         // handle inputs
         // ---------------------------------------
         ProcessInput(m_Window);
-        
+
         glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-        glfwSetCursorPosCallback(m_Window, MouseCallback);
+        glfwSetCursorPosCallback(m_Window, OnMouseCallback);
     }
 
     void Window::Destroy()
@@ -90,7 +85,7 @@ namespace Core
         glfwPollEvents();
     }
 
-    bool Window::ShouldClose() const
+    auto Window::ShouldClose() const -> bool
     {
         return glfwWindowShouldClose(m_Window) != 0;
     }
@@ -145,9 +140,25 @@ namespace Core
         }
     }
 
-    void Window::MouseCallback(GLFWwindow* window, double xpos, double ypos) {
-        Window& self = *static_cast<Window*>(glfwGetWindowUserPointer(window));
+    void Window::OnMouseCallback(GLFWwindow *window, double xpos, double ypos)
+    {
+        Window& self = *static_cast<Window *>(glfwGetWindowUserPointer(window));
         MouseMovedEvent event(static_cast<float>(xpos), static_cast<float>(ypos));
+        self.RaiseEvent(event);
+    }
+
+    void Window::OnWindowResize(GLFWwindow *window, int width, int height)
+    {
+        glViewport(0, 0, width, height);
+        Window& self = *static_cast<Window *>(glfwGetWindowUserPointer(window));
+        WindowResizeEvent event(width, height);
+        self.RaiseEvent(event);
+    }
+
+    void Window::OnWindowClose(GLFWwindow *window)
+    {
+        Window& self = *static_cast<Window *>(glfwGetWindowUserPointer(window));
+        WindowClosedEvent event;
         self.RaiseEvent(event);
     }
 

@@ -46,8 +46,10 @@ namespace Core
     private:
         WindowSpecification m_Specification;
         GLFWwindow *m_Window = nullptr;
-        
+
         void ProcessInput(GLFWwindow *window);
-        static void MouseCallback(GLFWwindow* window, double xpos, double ypos);
+        static void OnMouseCallback(GLFWwindow *window, double xpos, double ypos);
+        static void OnWindowResize(GLFWwindow *window, int width, int height);
+        static void OnWindowClose(GLFWwindow *window);
     };
 } // namespace Core
