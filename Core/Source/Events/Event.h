@@ -9,6 +9,7 @@ namespace Core
         None = 0,
         WindowClose,
         WindowResize,
+        WindowScroll,
         KeyPressed,
         KeyReleased,
         MouseButtonPressed,

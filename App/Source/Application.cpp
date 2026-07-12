@@ -250,7 +250,7 @@ namespace App
             m_Shader->SetUniformMat4f("u_View", m_Camera->GetViewMatrix());
             m_Shader->SetUniformMat4f(
                 "u_Projection",
-                m_Camera->GetProjectionMatrix(glm::radians(45.0f), framebufferSize.x, framebufferSize.y, 0.1f, 100.0f));
+                m_Camera->GetProjectionMatrix(framebufferSize.x, framebufferSize.y, 0.1f, 100.0f));
 
             m_Renderer.Draw(*m_VertexArray, *m_Shader, *m_Texture);
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

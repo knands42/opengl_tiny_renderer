@@ -60,9 +60,10 @@ namespace Core
         int fbW = 0, fbH = 0;
         glfwGetFramebufferSize(m_Window, &fbW, &fbH);
         glViewport(0, 0, fbW, fbH);
-        
+
         // handle events
         glfwSetWindowCloseCallback(m_Window, OnWindowClose);
+        glfwSetScrollCallback(m_Window, OnWindowScroll);
 
         // handle inputs
         // ---------------------------------------
@@ -142,6 +143,16 @@ namespace Core
             KeyPressedEvent event(GLFW_KEY_D, true);
             RaiseEvent(event);
         }
+        if (glfwGetKey(window, GLFW_KEY_SPACE))
+        {
+            KeyPressedEvent event(GLFW_KEY_SPACE, true);
+            RaiseEvent(event);
+        }
+        if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL))
+        {
+            KeyPressedEvent event(GLFW_KEY_LEFT_CONTROL, true);
+            RaiseEvent(event);
+        }
     }
 
     void Window::OnMouseCallback(GLFWwindow *window, double xpos, double ypos)
@@ -156,7 +167,7 @@ namespace Core
         int fbW = 0, fbH = 0;
         glfwGetFramebufferSize(window, &fbW, &fbH);
         glViewport(0, 0, fbW, fbH);
-        
+
         Window& self = *static_cast<Window *>(glfwGetWindowUserPointer(window));
         WindowResizeEvent event(fbW, fbH);
         self.RaiseEvent(event);
@@ -169,4 +180,10 @@ namespace Core
         self.RaiseEvent(event);
     }
 
+    void Window::OnWindowScroll(GLFWwindow *window, double xoffset, double yoffset)
+    {
+        Window& self = *static_cast<Window *>(glfwGetWindowUserPointer(window));
+        WindowScrollEvent event(static_cast<float>(xoffset), static_cast<float>(yoffset));
+        self.RaiseEvent(event);
+    }
 } // namespace Core

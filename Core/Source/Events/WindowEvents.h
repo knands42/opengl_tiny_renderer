@@ -1,8 +1,10 @@
 #pragma once
 
 #include <cstdio>
-#include "Event.h"
+
 #include <glad/gl.h>
+
+#include "Event.h"
 
 namespace Core
 {
@@ -42,6 +44,35 @@ namespace Core
 
     private:
         uint32_t m_Width, m_Height;
+        mutable char m_StringBuffer[64];
+    };
+
+    class WindowScrollEvent : public Event
+    {
+    public:
+        WindowScrollEvent(float xoffset, float yoffset) : m_XOffset(xoffset), m_YOffset(yoffset)
+        {
+        }
+
+        inline float GetXOffset() const
+        {
+            return m_XOffset;
+        }
+        inline float GetYOffset() const
+        {
+            return m_YOffset;
+        }
+
+        const char *ToString() const override
+        {
+            snprintf(m_StringBuffer, sizeof(m_StringBuffer), "WindowScrollEvent: %.2f %.2f", m_XOffset, m_YOffset);
+            return m_StringBuffer;
+        }
+
+        EVENT_CLASS_TYPE(WindowScroll)
+
+    private:
+        float m_XOffset, m_YOffset;
         mutable char m_StringBuffer[64];
     };
 } // namespace Core

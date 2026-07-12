@@ -5,6 +5,7 @@
 
 #include "Events/Event.h"
 #include "Events/InputEvents.h"
+#include "Events/WindowEvents.h"
 
 namespace Core
 {
@@ -18,6 +19,8 @@ namespace Core
     {
     private:
         float m_AspectRatio; // TODO: how to use this?
+        float m_Fov = 45.0f; // TODO: how to use this?
+
         float m_LastFrame = 0.0f;
 
         glm::vec3 m_Position;
@@ -30,17 +33,17 @@ namespace Core
         float m_CurrentPitch = 0.0f;
 
         void RecomputeViewMatrix(float yaw, float pitch);
-        
+
         static bool HandleKeyPressedEvent(Camera& camera, KeyPressedEvent& event);
         static bool HandleMouseMovedEvent(Camera& camera, MouseMovedEvent& event);
+        static bool HandleWindowScrollEvent(Camera& camera, WindowScrollEvent& event);
 
     public:
         Camera();
         ~Camera();
 
         [[nodiscard]] glm::mat4 GetViewMatrix() const;
-        [[nodiscard]] glm::mat4 GetProjectionMatrix(float fov, float width, float height, float nearPlane,
-                                                    float farPlane) const;
+        [[nodiscard]] glm::mat4 GetProjectionMatrix(float width, float height, float nearPlane, float farPlane) const;
         [[nodiscard]] glm::mat4 GetModelMatrix(ModelMatrix& modelMatrix) const;
         void RaiseEvent(Event& event);
 

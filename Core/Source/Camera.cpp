@@ -1,7 +1,5 @@
 #include "Camera.h"
 
-#include <cstdlib>
-
 #include <GLFW/glfw3.h>
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/ext/matrix_transform.hpp>
@@ -10,7 +8,7 @@
 
 namespace Core
 {
-    Camera::Camera() : m_Position(glm::vec3(0.0f))
+    Camera::Camera() : m_Position(glm::vec3(0.0f)), m_Fov(glm::radians(45.0f)), m_AspectRatio(16.0f / 9.0f)
     {
     }
 
@@ -23,10 +21,10 @@ namespace Core
         return glm::lookAt(m_Position, m_Position + m_CameraFront, m_CameraUp);
     }
 
-    auto Camera::GetProjectionMatrix(const float fov, const float width, const float height, const float nearPlane,
+    auto Camera::GetProjectionMatrix(const float width, const float height, const float nearPlane,
                                      const float farPlane) const -> glm::mat4
     {
-        return glm::perspective(fov, width / height, nearPlane, farPlane);
+        return glm::perspective(m_Fov, width / height, nearPlane, farPlane);
     }
 
     auto Camera::GetModelMatrix(ModelMatrix& modelMatrix) const -> glm::mat4
@@ -50,6 +48,8 @@ namespace Core
                                              { return HandleKeyPressedEvent(*this, e); });
         dispatcher.Dispatch<MouseMovedEvent>([this](MouseMovedEvent& e) -> bool
                                              { return HandleMouseMovedEvent(*this, e); });
+        dispatcher.Dispatch<WindowScrollEvent>([this](WindowScrollEvent& e) -> bool
+                                               { return HandleWindowScrollEvent(*this, e); });
     }
 
     auto Camera::HandleKeyPressedEvent(Camera& camera, KeyPressedEvent& event) -> bool
@@ -76,6 +76,12 @@ namespace Core
             break;
         case GLFW_KEY_D:
             camera.m_Position -= cameraRightTranslation;
+            break;
+        case GLFW_KEY_SPACE:
+            camera.m_Position += camera.m_CameraUp * cameraSpeed;
+            break;
+        case GLFW_KEY_LEFT_CONTROL:
+            camera.m_Position -= camera.m_CameraUp * cameraSpeed;
             break;
         default:
             return false;
@@ -107,6 +113,18 @@ namespace Core
         return true;
     }
 
+    bool Camera::HandleWindowScrollEvent(Camera& camera, WindowScrollEvent& event)
+    {
+        auto sensitivity = 0.1f;
+        camera.m_Fov -= static_cast<float>(event.GetYOffset()) * sensitivity;
+        if (camera.m_Fov < 1.0f)
+            camera.m_Fov = 1.0f;
+        if (camera.m_Fov > 45.0f)
+            camera.m_Fov = 45.0f;
+
+        return true;
+    }
+
     void Camera::RecomputeViewMatrix(float yaw, float pitch)
     {
         m_CameraFront.x = -sin(glm::radians(yaw)) * cos(glm::radians(pitch));
@@ -114,4 +132,5 @@ namespace Core
         m_CameraFront.z = -cos(glm::radians(yaw)) * cos(glm::radians(pitch));
         m_CameraFront = glm::normalize(m_CameraFront);
     }
+
 } // namespace Core

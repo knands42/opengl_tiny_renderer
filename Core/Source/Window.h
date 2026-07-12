@@ -51,5 +51,6 @@ namespace Core
         static void OnMouseCallback(GLFWwindow *window, double xpos, double ypos);
         static void OnWindowResize(GLFWwindow *window, int width, int height);
         static void OnWindowClose(GLFWwindow *window);
+        static void OnWindowScroll(GLFWwindow *window, double xoffset, double yoffset);
     };
 } // namespace Core
