@@ -5,6 +5,8 @@ file(GLOB SOURCES
     Source/*.cpp
     Source/Events/*.h
     Source/Events/*.cpp
+    Source/Vertices/*.h
+    Source/Vertices/*.cpp
 )
 
 add_library(Core STATIC)
@@ -17,6 +19,7 @@ add_compile_definitions(
 target_link_libraries(Core PUBLIC glfw)
 target_link_libraries(Core PUBLIC glad)
 target_link_libraries(Core PUBLIC glm)
+target_link_libraries(Core PUBLIC imgui) # TODO: Move this to the app layer
 
 
 target_include_directories(Core

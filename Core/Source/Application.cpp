@@ -1,33 +1,30 @@
 #include "Application.h"
 
 #include <cassert>
-#include <cstdio>
 #include <memory>
 
 #include <glm/common.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <print>
 
 #include "Camera.h"
-#include "Events/WindowEvents.h"
 #include "Renderer.h"
 #include "Shader.h"
 #include "Texture.h"
-#include "VertexArray.h"
 #include "Window.h"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
-namespace App
+namespace Core
 {
-
     static Application *s_Application = nullptr;
 
     static void GLFWErrorCallback(int error, const char *description)
     {
-        fprintf(stderr, "[GLFW Error]: %s\n", description);
+        std::println(stderr, "[GLFW Error]: {}", description);
     }
 
     Application::~Application()
@@ -249,8 +246,7 @@ namespace App
             m_Shader->SetUniformMat4f("u_Model", m_Camera->GetModelMatrix(modelMatrix));
             m_Shader->SetUniformMat4f("u_View", m_Camera->GetViewMatrix());
             m_Shader->SetUniformMat4f(
-                "u_Projection",
-                m_Camera->GetProjectionMatrix(framebufferSize.x, framebufferSize.y, 0.1f, 100.0f));
+                "u_Projection", m_Camera->GetProjectionMatrix(framebufferSize.x, framebufferSize.y, 0.1f, 100.0f));
 
             m_Renderer.Draw(*m_VertexArray, *m_Shader, *m_Texture);
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -260,18 +256,18 @@ namespace App
         }
     }
 
-    glm::vec2 Application::GetFramebufferSize() const
+    auto Application::GetFramebufferSize() const -> glm::vec2
     {
         return m_Window->GetFrameBufferSize();
     }
 
-    Application& Application::Get()
+    auto Application::Get() -> Application&
     {
         assert(s_Application);
         return *s_Application;
     }
 
-    float Application::GetTime()
+    auto Application::GetTime() -> float
     {
         return static_cast<float>(glfwGetTime());
     }
@@ -281,4 +277,4 @@ namespace App
         m_Camera->RaiseEvent(event);
         Core::EventDispatcher dispatcher(event);
     }
-} // namespace App
+} // namespace Core

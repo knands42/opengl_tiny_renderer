@@ -19,7 +19,7 @@ namespace Core
     {
     private:
         float m_AspectRatio; // TODO: how to use this?
-        float m_Fov = 45.0f; // TODO: how to use this?
+        float m_Fov = 45.0f;
 
         float m_LastFrame = 0.0f;
 

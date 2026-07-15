@@ -2,7 +2,7 @@
 
 #include "IndexBuffer.h"
 #include "Shader.h"
-#include "VertexArray.h"
+#include "Vertices/VertexArray.h"
 #include "Texture.h"
 
 namespace Core
