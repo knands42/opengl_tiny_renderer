@@ -30,8 +30,19 @@ namespace Core
 
         [[nodiscard]] auto GetFramebufferSize() const -> glm::vec2;
         static auto Get() -> Application&;
+        auto GetWindow()
+        {
+            return m_Window;
+        }
 
         static auto GetTime() -> float;
+
+        template <typename TLayer>
+            requires(std::is_base_of_v<Layer, TLayer>)
+        void PushLayer()
+        {
+            m_LayerStack.push_back(std::make_unique<TLayer>());
+        }
 
         void RaiseEvent(Event& event);
 
@@ -40,15 +51,6 @@ namespace Core
         std::shared_ptr<Window> m_Window;
         bool m_Running = false;
 
-        std::array<std::unique_ptr<Layer>, 2> m_LayerStack;
-
-        // TODO: Remove heap allocation
-        Shader *m_Shader{};
-        VertexBuffer *m_VertexBuffer{};
-        IndexBuffer *m_IndexBuffer{};
-        VertexArray *m_VertexArray{};
-        Texture *m_Texture{};
-        Camera *m_Camera{};
-        Renderer m_Renderer;
+        mutable std::vector<std::unique_ptr<Layer>> m_LayerStack;
     };
 } // namespace Core
