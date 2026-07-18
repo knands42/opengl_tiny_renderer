@@ -15,6 +15,10 @@ namespace Core
         VertexArray();
         ~VertexArray();
 
+        // Rule of Five: GL resources are exclusive — no copies, only moves.
+        VertexArray(const VertexArray&) = delete;
+        auto operator=(const VertexArray&) -> VertexArray& = delete;
+
         void Bind() const;
         void Unbind() const;
 

@@ -10,13 +10,11 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Camera.h"
-#include "Renderer.h"
-#include "Shader.h"
-#include "Texture.h"
 #include "Window.h"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include "ranges"
 
 namespace Core
 {
@@ -52,6 +50,18 @@ namespace Core
 
         m_Window = std::make_shared<Core::Window>(m_Specification.WindowSpec);
         m_Window->Create();
+
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImGuiIO& io = ImGui::GetIO();
+        (void)io;
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+
+        ImGui::StyleColorsDark();
+
+        ImGui_ImplGlfw_InitForOpenGL(m_Window->GetNativeWindow(), true);
+        ImGui_ImplOpenGL3_Init("#version 130");
     }
 
     auto Application::Stop() -> void
@@ -73,7 +83,26 @@ namespace Core
                 break;
             }
 
-            // TODO: Iterate over layers and call them
+            ImGui_ImplOpenGL3_NewFrame();
+            ImGui_ImplGlfw_NewFrame();
+            ImGui::NewFrame();
+
+
+            float currentTime = GetTime();
+            float timestep = glm::clamp(currentTime - lastTime, 0.001f, 0.1f);
+            lastTime = currentTime;
+
+            for (const std::unique_ptr<Layer>& layer : m_LayerStack)
+            {
+                layer->OnUpdate(timestep);
+            }
+
+            for (const std::unique_ptr<Layer>& layer : m_LayerStack)
+            {
+                layer->OnRender();
+            }
+
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
             // check and call events and swap the buffers
             m_Window->Update();
@@ -104,5 +133,7 @@ namespace Core
             if (event.Handled)
                 break;
         }
+
+        return;
     }
 } // namespace Core

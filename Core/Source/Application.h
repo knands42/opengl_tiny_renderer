@@ -1,14 +1,11 @@
+#pragma once
+
 #include <memory>
 
 #include <glad/gl.h>
 
-#include "Camera.h"
 #include "Events/Event.h"
 #include "Layer.h"
-#include "Renderer.h"
-#include "Shader.h"
-#include "Texture.h"
-#include "Vertices/VertexArray.h"
 #include "Window.h"
 
 namespace Core
@@ -41,7 +38,9 @@ namespace Core
             requires(std::is_base_of_v<Layer, TLayer>)
         void PushLayer()
         {
-            m_LayerStack.push_back(std::make_unique<TLayer>());
+            auto layer = std::make_unique<TLayer>();
+            layer->SetWindow(m_Window.get());
+            m_LayerStack.push_back(std::move(layer));
         }
 
         void RaiseEvent(Event& event);
@@ -51,6 +50,6 @@ namespace Core
         std::shared_ptr<Window> m_Window;
         bool m_Running = false;
 
-        mutable std::vector<std::unique_ptr<Layer>> m_LayerStack;
+        mutable std::vector<std::unique_ptr<Layer>> m_LayerStack = {};
     };
 } // namespace Core

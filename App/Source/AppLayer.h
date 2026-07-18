@@ -4,13 +4,11 @@
 
 #include "Camera.h"
 #include "Events/Event.h"
-#include "IndexBuffer.h"
 #include "Layer.h"
 #include "Renderer.h"
 #include "Shader.h"
 #include "Texture.h"
 #include "Vertices/VertexArray.h"
-#include "Vertices/VertexBuffer.h"
 
 namespace App
 {
@@ -29,13 +27,9 @@ namespace App
 
     private:
         Core::Shader m_Shader;
-        Core::VertexBuffer m_VertexBuffer;
-        Core::IndexBuffer m_IndexBuffer;
         Core::VertexArray m_VertexArray;
         Core::Texture m_Texture;
         Core::Camera m_Camera;
         Core::Renderer m_Renderer;
-
-        float m_LastTime;
     };
 } // namespace App

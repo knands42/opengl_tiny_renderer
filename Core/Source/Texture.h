@@ -14,6 +14,10 @@ namespace Core
         Texture(const char *path);
         ~Texture();
 
+        // Rule of Five: GL resources are exclusive — no copies, only moves.
+        Texture(const Texture&) = delete;
+        auto operator=(const Texture&) -> Texture& = delete;
+
         void Bind(unsigned int slot = 0) const;
         void Unbind() const;
 

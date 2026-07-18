@@ -22,6 +22,10 @@ namespace Core
         explicit Shader(const char *vertexPath, const char *fragmentPath);
         ~Shader();
 
+        // Rule of Five: GL resources are exclusive — no copies, only moves.
+        Shader(const Shader&) = delete;
+        auto operator=(const Shader&) -> Shader& = delete;
+
         auto Bind() const -> void;
         auto Unbind() const -> void;
         auto SetUniform4f(const char *name, glm::vec4 vector) const -> void;
