@@ -102,6 +102,7 @@ namespace Core
                 layer->OnRender();
             }
 
+            ImGui::Render();
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
             // check and call events and swap the buffers
@@ -127,6 +128,13 @@ namespace Core
 
     void Application::RaiseEvent(Core::Event& event)
     {
+        if (event.GetEventType() == EventType::WindowClose)
+        {
+            Stop();
+            event.Handled = true;
+            return;
+        }
+
         for (auto& layer : std::views::reverse(m_LayerStack))
         {
             layer->OnEvent(event);

@@ -1,7 +1,6 @@
 #include "AppLayer.h"
 
 #include <cassert>
-#include <print>
 
 #include <GLFW/glfw3.h>
 
@@ -150,8 +149,6 @@ namespace App
         ImGui::SliderFloat3("translation", &modelMatrix.translation.x, -1.5f, 1.5f, "%.3f");
         ImGui::SliderFloat3("scale", &modelMatrix.scale.x, 0.1f, 2.0f, "%.3f");
         ImGui::Text("Application average %.3f ms/frame", 1000.0f / ImGui::GetIO().Framerate);
-
-        ImGui::Render();
 
         // render
         glm::vec2 framebufferSize = m_Window->GetFrameBufferSize();
