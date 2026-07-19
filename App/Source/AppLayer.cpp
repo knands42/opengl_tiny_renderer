@@ -10,119 +10,18 @@ namespace App
 {
     // TODO: improve, check if is a copy constructor or move constructor
     AppLayer::AppLayer()
-        : m_VertexArray(Core::VertexArray()),
+        : m_VertexBuffer(Core::VertexBuffer(m_Vertices, sizeof(m_Vertices))), m_VertexArray(Core::VertexArray()),
           m_Shader(Core::Shader("Shaders/vertex.glsl", "Shaders/fragment.glsl")),
           m_Texture(Core::Texture("Textures/wall.jpg")), m_Camera(Core::Camera())
     {
-        // Creating VBO, VAO, EBO, Shaders
-        constexpr float vertices[] = {
-            // positions            // texture coords
-            // Front face
-            0.0f,
-            0.5f,
-            0.0f,
-            0.5f,
-            1.0f,
-            -0.5f,
-            -0.5f,
-            0.5f,
-            0.0f,
-            0.0f,
-            0.5f,
-            -0.5f,
-            0.5f,
-            1.0f,
-            0.0f,
-            // Right face
-            0.0f,
-            0.5f,
-            0.0f,
-            0.5f,
-            1.0f,
-            0.5f,
-            -0.5f,
-            0.5f,
-            0.0f,
-            0.0f,
-            0.5f,
-            -0.5f,
-            -0.5f,
-            1.0f,
-            0.0f,
-            // Back face
-            0.0f,
-            0.5f,
-            0.0f,
-            0.5f,
-            1.0f,
-            0.5f,
-            -0.5f,
-            -0.5f,
-            0.0f,
-            0.0f,
-            -0.5f,
-            -0.5f,
-            -0.5f,
-            1.0f,
-            0.0f,
-            // Left face
-            0.0f,
-            0.5f,
-            0.0f,
-            0.5f,
-            1.0f,
-            -0.5f,
-            -0.5f,
-            -0.5f,
-            0.0f,
-            0.0f,
-            -0.5f,
-            -0.5f,
-            0.5f,
-            1.0f,
-            0.0f,
-            // Bottom face (two triangles)
-            -0.5f,
-            -0.5f,
-            0.5f,
-            0.0f,
-            0.0f,
-            0.5f,
-            -0.5f,
-            -0.5f,
-            1.0f,
-            1.0f,
-            0.5f,
-            -0.5f,
-            0.5f,
-            1.0f,
-            0.0f,
-            -0.5f,
-            -0.5f,
-            0.5f,
-            0.0f,
-            0.0f,
-            -0.5f,
-            -0.5f,
-            -0.5f,
-            0.0f,
-            1.0f,
-            0.5f,
-            -0.5f,
-            -0.5f,
-            1.0f,
-            1.0f,
-        };
-
         GLCall(glEnable(GL_BLEND));
         GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
         GLCall(glEnable(GL_DEPTH_TEST));
 
-        auto vertexBuffer = Core::VertexBuffer(vertices, sizeof(vertices));
         Core::VertexBufferLayout layout;
         layout.Push<float>(3); // positions
         layout.Push<float>(2); // textures
-        m_VertexArray.AddBuffer(vertexBuffer, layout);
+        m_VertexArray.AddBuffer(m_VertexBuffer, layout);
 
         m_Shader.Bind();
         m_Texture.Bind();
